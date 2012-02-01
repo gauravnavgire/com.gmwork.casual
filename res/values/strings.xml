@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, GmWorkActivity!</string>
+    <string name="app_name">Bollywood</string>
+    <string name="play">Play</string>
+    <string name="howtoplay">How to play</string>
+    <string name="about">About</string>
+    <string name="A">A</string>
+    <string name="B">B</string>
+    <string name="C">C</string>
+    <string name="D">D</string>
+    <string name="E">E</string>
+    <string name="F">F</string>
+    <string name="G">G</string>
+    <string name="H">H</string>
+    <string name="I">I</string>
+    <string name="J">J</string>
+    <string name="K">K</string>
+    <string name="L">L</string>
+    <string name="M">M</string>
+    <string name="N">N</string>
+    <string name="O">O</string>
+    <string name="P">P</string>
+    <string name="Q">Q</string>
+    <string name="R">R</string>
+    <string name="S">S</string>
+    <string name="T">T</string>
+    <string name="U">U</string>
+    <string name="V">V</string>
+    <string name="W">W</string>
+    <string name="X">X</string>
+    <string name="Y">Y</string>
+    <string name="Z">Z</string>
+    <string name="congrats_title">Congratulations!</string>
+    <string name="won_message">You have won this game. \n The movie was </string>
+    <string name="main_page">Main Page</string>
+    <string name="continue_button">Continue</string>
+    <string name="game_lost">You Lose!</string>
+    <string name="lost_message">Sorry.You lost this game.\n The movie was </string>
+    <string name="howtoplaytext"> Guess the Bollywood movie by clicking the alphabets you think can be in the hidden movie name.</string>
+  <string name="ok">Ok</string>
+  <string name="about_title">About</string>
+  <string name="about_message">Bollywood Version 1. \n Developed by Gaurav Navgire. </string>
+  <string name="guess">Guess</string>
+  <string name="guess_title">Do you want to guess?</string>
+  <string name="guess_warning">Bonus won if guess is correct Or else \n Penalty is charged for wrong guess.</string>
+  <string name="cancel">Cancel</string>
+</resources>

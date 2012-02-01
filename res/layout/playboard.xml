@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/playboardlayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bollywood"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:background="@drawable/transp_bg"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/tries"
+            android:layout_width="130dip"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="left|bottom"
+            android:paddingLeft="10dip"
+            android:text="Tries Left : 5"
+            android:textColor="#FF0000"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:typeface="sans" />
+
+        <ImageButton
+            android:id="@+id/speaker"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:paddingBottom="1dip"
+            android:src="@drawable/speaker_button" />
+
+        <TextView
+            android:id="@+id/countdown"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:gravity="right|bottom"
+            android:paddingRight="10dip"
+            android:text="Time : 30 secs"
+            android:textColor="#FF0000"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:typeface="sans" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/bollylogo"
+        android:layout_width="fill_parent"
+        android:layout_height="150dip"
+        android:background="@drawable/transp_bg"
+        android:scaleType="fitXY"
+        android:src="@drawable/bollywood_logo" />
+
+    <TextView
+        android:id="@+id/hiddenmovie"
+        android:layout_width="fill_parent"
+        android:layout_height="100dip"
+        android:layout_gravity="center"
+        android:background="@drawable/transp_bg"
+        android:gravity="center"
+        android:maxLines="5"
+        android:text="J I S M"
+        android:textColor="#82E30B"
+        android:textColorHighlight="#E9EB2B"
+        android:textSize="22sp"
+        android:textStyle="italic"
+        android:typeface="serif" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/transp_bg" >
+
+        <TableLayout
+            android:id="@+id/alphabet_table"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:stretchColumns="*" >
+
+            <TableRow >
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="1"
+                    android:padding="3dip"
+                    android:text="@string/A" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="2"
+                    android:padding="3dip"
+                    android:text="@string/B" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="3"
+                    android:padding="3dip"
+                    android:text="@string/C" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="4"
+                    android:padding="3dip"
+                    android:text="@string/D" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="5"
+                    android:padding="3dip"
+                    android:text="@string/E" />
+            </TableRow>
+
+            <TableRow >
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="1"
+                    android:padding="3dip"
+                    android:text="@string/F" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="2"
+                    android:padding="3dip"
+                    android:text="@string/G" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="3"
+                    android:padding="3dip"
+                    android:text="@string/H" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="4"
+                    android:padding="3dip"
+                    android:text="@string/I" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="5"
+                    android:padding="3dip"
+                    android:text="@string/J" />
+            </TableRow>
+
+            <TableRow >
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="1"
+                    android:padding="3dip"
+                    android:text="@string/K" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="2"
+                    android:padding="3dip"
+                    android:text="@string/L" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="3"
+                    android:padding="3dip"
+                    android:text="@string/M" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="4"
+                    android:padding="3dip"
+                    android:text="@string/N" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="5"
+                    android:padding="3dip"
+                    android:text="@string/O" />
+            </TableRow>
+
+            <TableRow >
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="1"
+                    android:padding="3dip"
+                    android:text="@string/P" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="2"
+                    android:padding="3dip"
+                    android:text="@string/Q" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="3"
+                    android:padding="3dip"
+                    android:text="@string/R" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="4"
+                    android:padding="3dip"
+                    android:text="@string/S" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="5"
+                    android:padding="3dip"
+                    android:text="@string/T" />
+            </TableRow>
+
+            <TableRow >
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="1"
+                    android:padding="3dip"
+                    android:text="@string/U" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="2"
+                    android:padding="3dip"
+                    android:text="@string/V" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="3"
+                    android:padding="3dip"
+                    android:text="@string/W" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="4"
+                    android:padding="3dip"
+                    android:text="@string/X" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="5"
+                    android:padding="3dip"
+                    android:text="@string/Y" />
+            </TableRow>
+
+            <TableRow >
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="1"
+                    android:padding="3dip"
+                    android:text="@string/Z" />
+
+                <Button
+                    android:id="@+id/play_btn"
+                    android:layout_column="1"
+                    android:padding="3dip"
+                    android:text="@string/guess" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+
+</LinearLayout>
