@@ -1,6 +1,8 @@
 package com.gmwork.casual;
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.Random;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -28,6 +31,8 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import com.gmwork.casual.database.ContentDescriptor;
 
 public class PlayBoardActivity extends Activity {
 	private TableLayout mTableLayout;
@@ -63,27 +68,27 @@ public class PlayBoardActivity extends Activity {
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		mediaPlayer = new MediaPlayer();
-		try {
-			AssetManager assetManager = getAssets();
-			AssetFileDescriptor descriptor = assetManager
-					.openFd("main_background_music.mp3");
-			mediaPlayer.setDataSource(descriptor.getFileDescriptor(),
-					descriptor.getStartOffset(), descriptor.getLength());
-			mediaPlayer.prepare();
-			mediaPlayer.setLooping(true);
-		} catch (IOException e) {
-			Log.d(LOG_TAG,
-					"Couldn't load sound effect from asset, " + e.getMessage());
-			mediaPlayer = null;
-
-		} catch (IllegalStateException e) {
-			Log.d(LOG_TAG, "Couldn't load music from asset, " + e.getMessage());
-			mediaPlayer = null;
-
-		}
+		// try {
+		// AssetManager assetManager = getAssets();
+		// AssetFileDescriptor descriptor = assetManager
+		// .openFd("main_background_music.mp3");
+		// mediaPlayer.setDataSource(descriptor.getFileDescriptor(),
+		// descriptor.getStartOffset(), descriptor.getLength());
+		// mediaPlayer.prepare();
+		// mediaPlayer.setLooping(true);
+		// } catch (IOException e) {
+		// Log.d(LOG_TAG,
+		// "Couldn't load sound effect from asset, " + e.getMessage());
+		// mediaPlayer = null;
+		//
+		// } catch (IllegalStateException e) {
+		// Log.d(LOG_TAG, "Couldn't load music from asset, " + e.getMessage());
+		// mediaPlayer = null;
+		//
+		// }
 
 		/** Get the Movie **/
-		mMovie = "KAMINEY";
+		mMovie = getMovie();
 
 		final StringBuffer movieBuffer;
 		mTriesView = (TextView) findViewById(R.id.tries);
@@ -154,8 +159,12 @@ public class PlayBoardActivity extends Activity {
 		mHiddenMovie.setText("");
 		/** Set the hidden movie **/
 		do {
+			if (charMovieArray[count] != ' ') {
+				mHiddenMovie.setText(mHiddenMovie.getText() + " _");
+			} else {
+				mHiddenMovie.setText(mHiddenMovie.getText() + "  ");
+			}
 			count++;
-			mHiddenMovie.setText(mHiddenMovie.getText() + " _");
 		} while (count != charMovieArray.length);
 
 		movieBuffer = new StringBuffer(mHiddenMovie.getText());
@@ -175,12 +184,16 @@ public class PlayBoardActivity extends Activity {
 					public void onClick(View v) {
 						Log.d(LOG_TAG, "Alphabet pressed is =" + mAlphabet);
 						if (mMovie.contains(mAlphabet)) {
-
+							int movieLength = mMovie.length();
 							/** Show the hidden movie character **/
+							for (int i = 0; i < movieLength; i++) {
+								if (mMovie.charAt(i) == mAlphabet.charAt(0)) {
+									int indexBuf = i + (i + 1);
+									movieBuffer.setCharAt(indexBuf,
+											mAlphabet.charAt(0));
+								}
 
-							int indexBuf = (mMovie.indexOf(mAlphabet.charAt(0)))
-									+ (mMovie.indexOf(mAlphabet.charAt(0)) + 1);
-							movieBuffer.setCharAt(indexBuf, mAlphabet.charAt(0));
+							}
 
 							mHiddenMovie.setText(movieBuffer.toString());
 							Log.d(LOG_TAG,
@@ -190,18 +203,21 @@ public class PlayBoardActivity extends Activity {
 							String sText = mHiddenMovie.getText().toString()
 									.replaceAll(" ", "");
 							Log.d(LOG_TAG, "Hidden Movie sText = " + sText);
-							if (sText.equals(mMovie)) {
+							if (sText.equals(mMovie.replace(" ", ""))) {
 								isGameWon = true;
 							} else {
 								isGameWon = false;
 							}
 							if (isGameWon) {
+								String wonmsg = getResources().getString(
+										R.string.won_message)
+										+ " " + mMovie;
 								Builder dialog = new AlertDialog.Builder(
 										PlayBoardActivity.this)
 										.setIcon(
 												android.R.drawable.ic_dialog_info)
 										.setTitle(R.string.congrats_title)
-										.setMessage(R.string.won_message)
+										.setMessage(wonmsg)
 										.setPositiveButton(
 												R.string.continue_button,
 												mDataButtonListener)
@@ -210,7 +226,8 @@ public class PlayBoardActivity extends Activity {
 								dialog.show();
 							}
 							Button button = (Button) v;
-							button.setTextColor(android.R.color.darker_gray);
+							button.setTextColor(getResources().getColor(
+									android.R.color.transparent));
 							button.setClickable(false);
 
 						} else if (!mAlphabet.equals(getResources().getString(
@@ -218,19 +235,23 @@ public class PlayBoardActivity extends Activity {
 							mTries--;
 							mTriesView.setText("Tries Left : " + mTries);
 							if (mTries == 0) {
+								String lostmsg = getResources().getString(
+										R.string.lost_message)
+										+ " " + mMovie;
 								Builder dialog = new AlertDialog.Builder(
 										PlayBoardActivity.this)
 										.setIcon(
 												android.R.drawable.ic_dialog_info)
 										.setTitle(R.string.game_lost)
-										.setMessage(R.string.lost_message)
+										.setMessage(lostmsg)
 										.setNegativeButton(R.string.main_page,
 												mDataButtonListener);
 								dialog.show();
 							}
 
 							Button button = (Button) v;
-							button.setTextColor(android.R.color.white);
+							button.setTextColor(getResources().getColor(
+									android.R.color.transparent));
 							button.setClickable(false);
 						} else {
 
@@ -242,6 +263,39 @@ public class PlayBoardActivity extends Activity {
 			}
 		}
 
+	}
+
+	private String getMovie() {
+		Cursor cur = getContentResolver().query(
+				ContentDescriptor.Movie.CONTENT_URI, null, null, null, null);
+		StringBuilder s = new StringBuilder();
+		if (cur != null && cur.moveToFirst()) {
+
+			int totalMovies = cur.getCount() - 1;
+			int offset;
+			if (totalMovies > 0) {
+				offset = new Random().nextInt(totalMovies);
+				cur.move(offset);
+			}
+
+			s.append(cur.getString(cur
+					.getColumnIndex(ContentDescriptor.Movie.Column.MOVIE)));
+			s.append(" | ");
+			s.append(cur.getString(cur
+					.getColumnIndex(ContentDescriptor.Movie.Column.YEAR)));
+			s.append(" | ");
+			s.append(cur.getString(cur
+					.getColumnIndex(ContentDescriptor.Movie.Column.HINT)));
+			s.append("\n\n");
+			String movie = cur.getString(cur
+					.getColumnIndex(ContentDescriptor.Movie.Column.MOVIE));
+
+			movie = movie.toUpperCase(Locale.US);
+			Log.d(LOG_TAG, "MOVIE = " + movie);
+			return movie;
+
+		}
+		return null;
 	}
 
 	@Override
@@ -292,11 +346,14 @@ public class PlayBoardActivity extends Activity {
 							dialog.show();
 
 						} else {
+							String lostmsg = getResources().getString(
+									R.string.lost_message)
+									+ " " + mMovie;
 							Builder dialog = new AlertDialog.Builder(
 									PlayBoardActivity.this)
 									.setIcon(android.R.drawable.ic_dialog_info)
 									.setTitle(R.string.game_lost)
-									.setMessage(R.string.lost_message)
+									.setMessage(lostmsg)
 									.setNegativeButton(R.string.main_page,
 											mDataButtonListener);
 							dialog.show();

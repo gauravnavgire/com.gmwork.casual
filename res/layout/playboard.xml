@@ -21,18 +21,19 @@
             android:paddingLeft="10dip"
             android:text="Tries Left : 5"
             android:textColor="#FF0000"
-            android:textSize="17sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:typeface="sans" />
+            android:typeface="sans" 
+            android:background="@android:color/black"/>
 
         <ImageButton
             android:id="@+id/speaker"
             android:layout_width="50dip"
             android:layout_height="50dip"
             android:layout_gravity="center"
-            android:background="@android:color/transparent"
             android:paddingBottom="1dip"
-            android:src="@drawable/speaker_button" />
+            android:src="@drawable/speaker_button"
+            android:background="@android:color/black" />
 
         <TextView
             android:id="@+id/countdown"
@@ -42,9 +43,10 @@
             android:paddingRight="10dip"
             android:text="Time : 30 secs"
             android:textColor="#FF0000"
-            android:textSize="17sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:typeface="sans" />
+            android:typeface="sans" 
+            android:background="@android:color/black"/>
     </LinearLayout>
 
     <ImageView
@@ -66,7 +68,7 @@
         android:text="J I S M"
         android:textColor="#82E30B"
         android:textColorHighlight="#E9EB2B"
-        android:textSize="22sp"
+        android:textSize="30sp"
         android:textStyle="italic"
         android:typeface="serif" />
 
@@ -78,184 +80,157 @@
         <TableLayout
             android:id="@+id/alphabet_table"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:stretchColumns="*" >
 
-            <TableRow >
+            <TableRow>
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="1"
                     android:padding="3dip"
                     android:text="@string/A" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="2"
                     android:padding="3dip"
                     android:text="@string/B" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="3"
                     android:padding="3dip"
                     android:text="@string/C" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="4"
                     android:padding="3dip"
                     android:text="@string/D" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="5"
                     android:padding="3dip"
                     android:text="@string/E" />
             </TableRow>
 
-            <TableRow >
+            <TableRow>
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="1"
                     android:padding="3dip"
                     android:text="@string/F" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="2"
                     android:padding="3dip"
                     android:text="@string/G" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="3"
                     android:padding="3dip"
                     android:text="@string/H" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="4"
                     android:padding="3dip"
                     android:text="@string/I" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="5"
                     android:padding="3dip"
                     android:text="@string/J" />
             </TableRow>
 
-            <TableRow >
+            <TableRow>
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="1"
                     android:padding="3dip"
                     android:text="@string/K" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="2"
                     android:padding="3dip"
                     android:text="@string/L" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="3"
                     android:padding="3dip"
                     android:text="@string/M" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="4"
                     android:padding="3dip"
                     android:text="@string/N" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="5"
                     android:padding="3dip"
                     android:text="@string/O" />
             </TableRow>
 
-            <TableRow >
+            <TableRow>
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="1"
                     android:padding="3dip"
                     android:text="@string/P" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="2"
                     android:padding="3dip"
                     android:text="@string/Q" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="3"
                     android:padding="3dip"
                     android:text="@string/R" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="4"
                     android:padding="3dip"
                     android:text="@string/S" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="5"
                     android:padding="3dip"
                     android:text="@string/T" />
             </TableRow>
 
-            <TableRow >
+            <TableRow>
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="1"
                     android:padding="3dip"
                     android:text="@string/U" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="2"
                     android:padding="3dip"
                     android:text="@string/V" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="3"
                     android:padding="3dip"
                     android:text="@string/W" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="4"
                     android:padding="3dip"
                     android:text="@string/X" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="5"
                     android:padding="3dip"
                     android:text="@string/Y" />
             </TableRow>
 
-            <TableRow >
+            <TableRow>
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="1"
                     android:padding="3dip"
                     android:text="@string/Z" />
 
                 <Button
-                    android:id="@+id/play_btn"
                     android:layout_column="1"
                     android:padding="3dip"
                     android:text="@string/guess" />

@@ -1,19 +1,29 @@
 package com.gmwork.casual;
 
+import java.io.File;
 import java.io.IOException;
 
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,9 +38,14 @@ import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
+import com.gmwork.casual.database.ContentDescriptor;
 import com.gmwork.casual.utilities.Constants;
 
 public class GmWorkActivity extends Activity {
+
+	static {
+
+	}
 
 	private Button mPlayBtn;
 	private Button mHowToPlayBtn;
@@ -42,6 +57,9 @@ public class GmWorkActivity extends Activity {
 	private static String LOG_TAG = "GmWorkActivity";
 	private MediaPlayer mediaPlayer;
 	private boolean isMusicPlaying = true;
+	private Cursor cur;
+	private ContentResolver contentResolver;
+	private String mInputFile;
 	private Facebook facebook = new Facebook(Constants.FACEBOOK_APP_ID);
 	private SharedPreferences mSharedPref;
 	private AsyncFacebookRunner mAsyncRunner = new AsyncFacebookRunner(facebook);
@@ -58,6 +76,8 @@ public class GmWorkActivity extends Activity {
 		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.main);
+
+		contentResolver = getContentResolver();
 
 		/*
 		 * Get existing access_token if any
@@ -85,14 +105,14 @@ public class GmWorkActivity extends Activity {
 						@Override
 						public void onComplete(Bundle values) {
 							// TODO Auto-generated method stub
-							SharedPreferences.Editor editor = mSharedPref.edit();
+							SharedPreferences.Editor editor = mSharedPref
+									.edit();
 							editor.putString("access_token",
 									facebook.getAccessToken());
 							editor.putLong("access_expires",
 									facebook.getAccessExpires());
 							editor.commit();
-							
-							
+
 						}
 
 						@Override
@@ -116,6 +136,10 @@ public class GmWorkActivity extends Activity {
 					});
 		}
 
+		mInputFile = "/mnt/sdcard/movie.xls";
+		// load movie DB
+		new LoadDBTask().execute(this);
+
 		/**
 		 * Setting the background music
 		 * 
@@ -129,25 +153,25 @@ public class GmWorkActivity extends Activity {
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		soundPool = new SoundPool(20, AudioManager.STREAM_MUSIC, 0);
 
-		try {
-			AssetManager assetManager = getAssets();
-			AssetFileDescriptor descriptor = assetManager
-					.openFd("main_background_music.mp3");
-			musicId = soundPool.load(descriptor, 0);
-			mediaPlayer.setDataSource(descriptor.getFileDescriptor(),
-					descriptor.getStartOffset(), descriptor.getLength());
-			mediaPlayer.prepare();
-			mediaPlayer.setLooping(true);
-		} catch (IOException e) {
-			Log.d(LOG_TAG,
-					"Couldn't load sound effect from asset, " + e.getMessage());
-			mediaPlayer = null;
-
-		} catch (IllegalStateException e) {
-			Log.d(LOG_TAG, "Couldn't load music from asset, " + e.getMessage());
-			mediaPlayer = null;
-
-		}
+		// try {
+		// AssetManager assetManager = getAssets();
+		// AssetFileDescriptor descriptor = assetManager
+		// .openFd("main_background_music.mp3");
+		// musicId = soundPool.load(descriptor, 0);
+		// mediaPlayer.setDataSource(descriptor.getFileDescriptor(),
+		// descriptor.getStartOffset(), descriptor.getLength());
+		// mediaPlayer.prepare();
+		// mediaPlayer.setLooping(true);
+		// } catch (IOException e) {
+		// Log.d(LOG_TAG,
+		// "Couldn't load sound effect from asset, " + e.getMessage());
+		// mediaPlayer = null;
+		//
+		// } catch (IllegalStateException e) {
+		// Log.d(LOG_TAG, "Couldn't load music from asset, " + e.getMessage());
+		// mediaPlayer = null;
+		//
+		// }
 
 		mPlayBtn = (Button) findViewById(R.id.play_btn);
 		mHowToPlayBtn = (Button) findViewById(R.id.howtoplay_btn);
@@ -249,7 +273,7 @@ public class GmWorkActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		if (mediaPlayer != null) {
-			mediaPlayer.start();
+			// mediaPlayer.start();
 		}
 	}
 
@@ -268,7 +292,85 @@ public class GmWorkActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
-		facebook.authorizeCallback(requestCode, resultCode, data);
+		// facebook.authorizeCallback(requestCode, resultCode, data);
+	}
+
+	/**
+	 * This class will make api call to get the policy from the database.
+	 */
+	private class LoadDBTask extends AsyncTask<Context, Void, Void> {
+		private ProgressDialog mProgressDialog;
+
+		@Override
+		protected void onPreExecute() {
+			// mProgressDialog = new ProgressDialog(GmWorkActivity.this,
+			// ProgressDialog.THEME_HOLO_DARK);
+			// mProgressDialog.setMessage("Polulating the database. Please wait");
+			// mProgressDialog.show();
+
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			loadContent();
+			// mProgressDialog.dismiss();
+			super.onPostExecute(result);
+		}
+
+		@Override
+		protected Void doInBackground(Context... params) {
+			readXlsFile();
+			return null;
+		}
+	}
+
+	private void loadContent() {
+		cur = contentResolver.query(ContentDescriptor.Movie.CONTENT_URI, null,
+				null, null, null);
+	}
+
+	private void readXlsFile() {
+		if (mInputFile == null) {
+			return;
+		}
+		File xlFile = new File(mInputFile);
+		Log.d("****Content****", "The xsl file <" + mInputFile + "> exists ? "
+				+ xlFile.exists());
+		try {
+			Workbook workbook = Workbook.getWorkbook(xlFile);
+			Sheet sheet = workbook.getSheet(0);
+			for (int j = 0; j < sheet.getRows(); j++) {
+				StringBuilder movieString = new StringBuilder();
+				for (int i = 0; i < sheet.getColumns(); i++) {
+					Cell cell = sheet.getCell(i, j);
+					movieString.append(cell.getContents());
+					movieString.append(":");
+				}
+				saveContent(movieString);
+
+			}
+
+		} catch (BiffException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private void saveContent(StringBuilder movieString) {
+
+		String[] movieContent = movieString.toString().split(":");
+
+		if (movieContent != null && movieContent.length > 0) {
+			ContentValues cv = new ContentValues();
+			cv.put(ContentDescriptor.Movie.Column.MOVIE, movieContent[0]);
+			cv.put(ContentDescriptor.Movie.Column.YEAR, movieContent[1]);
+			cv.put(ContentDescriptor.Movie.Column.HINT, movieContent[2]);
+			contentResolver.insert(ContentDescriptor.Movie.CONTENT_URI, cv);
+		}
 	}
 
 }

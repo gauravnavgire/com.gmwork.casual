@@ -33,11 +33,11 @@
     <string name="Y">Y</string>
     <string name="Z">Z</string>
     <string name="congrats_title">Congratulations!</string>
-    <string name="won_message">You have won this game. \n The movie was </string>
+    <string name="won_message">You have won this game. \nThe movie was \n</string>
     <string name="main_page">Main Page</string>
     <string name="continue_button">Continue</string>
     <string name="game_lost">You Lose!</string>
-    <string name="lost_message">Sorry.You lost this game.\n The movie was </string>
+    <string name="lost_message">Sorry.You lost this game.\nThe movie was \n</string>
     <string name="howtoplaytext"> Guess the Bollywood movie by clicking the alphabets you think can be in the hidden movie name.</string>
   <string name="ok">Ok</string>
   <string name="about_title">About</string>
