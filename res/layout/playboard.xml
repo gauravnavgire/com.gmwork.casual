@@ -81,6 +81,7 @@
             android:id="@+id/alphabet_table"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
             android:stretchColumns="*" >
 
             <TableRow>
@@ -88,27 +89,33 @@
                 <Button
                     android:layout_column="1"
                     android:padding="3dip"
-                    android:text="@string/A" />
+                    android:text="@string/A" 
+                    android:textStyle="bold"
+                    android:background="@android:color/transparent"/>
 
                 <Button
                     android:layout_column="2"
                     android:padding="3dip"
-                    android:text="@string/B" />
+                    android:text="@string/B" 
+                    android:background="@android:color/transparent"/>
 
                 <Button
                     android:layout_column="3"
                     android:padding="3dip"
-                    android:text="@string/C" />
+                    android:text="@string/C" 
+                    android:background="@android:color/transparent"/>
 
                 <Button
                     android:layout_column="4"
                     android:padding="3dip"
-                    android:text="@string/D" />
+                    android:text="@string/D" 
+                    android:background="@android:color/transparent"/>
 
                 <Button
                     android:layout_column="5"
                     android:padding="3dip"
-                    android:text="@string/E" />
+                    android:text="@string/E" 
+                    android:background="@android:color/transparent"/>
             </TableRow>
 
             <TableRow>
@@ -116,27 +123,32 @@
                 <Button
                     android:layout_column="1"
                     android:padding="3dip"
-                    android:text="@string/F" />
+                    android:text="@string/F"
+                    android:background="@android:color/transparent" />
 
                 <Button
                     android:layout_column="2"
                     android:padding="3dip"
-                    android:text="@string/G" />
+                    android:text="@string/G"
+                    android:background="@android:color/transparent" />
 
                 <Button
                     android:layout_column="3"
                     android:padding="3dip"
-                    android:text="@string/H" />
+                    android:text="@string/H"
+                    android:background="@android:color/transparent" />
 
                 <Button
                     android:layout_column="4"
                     android:padding="3dip"
-                    android:text="@string/I" />
+                    android:text="@string/I"
+                    android:background="@android:color/transparent" />
 
                 <Button
                     android:layout_column="5"
                     android:padding="3dip"
-                    android:text="@string/J" />
+                    android:text="@string/J"
+                    android:background="@android:color/transparent" />
             </TableRow>
 
             <TableRow>
@@ -144,27 +156,32 @@
                 <Button
                     android:layout_column="1"
                     android:padding="3dip"
-                    android:text="@string/K" />
+                    android:text="@string/K"
+                    android:background="@android:color/transparent" />
 
                 <Button
                     android:layout_column="2"
                     android:padding="3dip"
-                    android:text="@string/L" />
+                    android:text="@string/L"
+                    android:background="@android:color/transparent" />
 
                 <Button
                     android:layout_column="3"
                     android:padding="3dip"
-                    android:text="@string/M" />
+                    android:text="@string/M"
+                    android:background="@android:color/transparent" />
 
                 <Button
                     android:layout_column="4"
                     android:padding="3dip"
-                    android:text="@string/N" />
+                    android:text="@string/N"
+                    android:background="@android:color/transparent" />
 
                 <Button
                     android:layout_column="5"
                     android:padding="3dip"
-                    android:text="@string/O" />
+                    android:text="@string/O"
+                    android:background="@android:color/transparent" />
             </TableRow>
 
             <TableRow>
@@ -172,27 +189,32 @@
                 <Button
                     android:layout_column="1"
                     android:padding="3dip"
-                    android:text="@string/P" />
+                    android:text="@string/P"
+                    android:background="@android:color/transparent" />
 
                 <Button
                     android:layout_column="2"
                     android:padding="3dip"
-                    android:text="@string/Q" />
+                    android:text="@string/Q"
+                    android:background="@android:color/transparent" />
 
                 <Button
                     android:layout_column="3"
                     android:padding="3dip"
-                    android:text="@string/R" />
+                    android:text="@string/R"
+                    android:background="@android:color/transparent" />
 
                 <Button
                     android:layout_column="4"
                     android:padding="3dip"
-                    android:text="@string/S" />
+                    android:text="@string/S"
+                    android:background="@android:color/transparent" />
 
                 <Button
                     android:layout_column="5"
                     android:padding="3dip"
-                    android:text="@string/T" />
+                    android:text="@string/T"
+                    android:background="@android:color/transparent" />
             </TableRow>
 
             <TableRow>
@@ -200,27 +222,32 @@
                 <Button
                     android:layout_column="1"
                     android:padding="3dip"
-                    android:text="@string/U" />
+                    android:text="@string/U"
+                    android:background="@android:color/transparent" />
 
                 <Button
                     android:layout_column="2"
                     android:padding="3dip"
-                    android:text="@string/V" />
+                    android:text="@string/V"
+                    android:background="@android:color/transparent" />
 
                 <Button
                     android:layout_column="3"
                     android:padding="3dip"
-                    android:text="@string/W" />
+                    android:text="@string/W"
+                    android:background="@android:color/transparent" />
 
                 <Button
                     android:layout_column="4"
                     android:padding="3dip"
-                    android:text="@string/X" />
+                    android:text="@string/X"
+                    android:background="@android:color/transparent" />
 
                 <Button
                     android:layout_column="5"
                     android:padding="3dip"
-                    android:text="@string/Y" />
+                    android:text="@string/Y"
+                    android:background="@android:color/transparent" />
             </TableRow>
 
             <TableRow>
@@ -228,12 +255,14 @@
                 <Button
                     android:layout_column="1"
                     android:padding="3dip"
-                    android:text="@string/Z" />
+                    android:text="@string/Z"
+                    android:background="@android:color/transparent" />
 
                 <Button
                     android:layout_column="1"
                     android:padding="3dip"
-                    android:text="@string/guess" />
+                    android:text="@string/guess"
+                    android:background="@android:color/transparent" />
             </TableRow>
         </TableLayout>
     </ScrollView>

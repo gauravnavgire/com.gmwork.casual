@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-     android:background="@drawable/bollywood"   
+    android:layout_height="match_parent"
+    android:background="@drawable/bollywood"
     android:orientation="vertical" >
 
     <ImageView
@@ -12,27 +12,31 @@
         android:scaleType="fitXY"
         android:src="@drawable/bollywood_logo" />
 
-    <Button
+    <ImageButton
         android:id="@+id/play_btn"
         android:layout_width="150dip"
-        android:layout_marginTop="100dip"
+        android:layout_marginTop="50dip"
         android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:text="@string/play" />
+        android:src="@drawable/play"
+        android:background="@android:color/transparent"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/howtoplay_btn"
         android:layout_width="150dip"
         android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:text="@string/howtoplay" />
+        android:src="@drawable/howto" 
+        android:background="@android:color/transparent"/>
     
-    <Button
+    <ImageButton
         android:id="@+id/about_btn"
         android:layout_gravity="center"
         android:layout_width="150dip"
         android:layout_height="wrap_content"
-        android:text="@string/about" />
+        android:src="@drawable/about"
+        android:background="@android:color/transparent" />
+    
     <ImageButton android:id="@+id/speaker"
         android:layout_width="50dip"
         android:layout_height="50dip"

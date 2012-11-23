@@ -42,14 +42,9 @@ import com.gmwork.casual.database.ContentDescriptor;
 import com.gmwork.casual.utilities.Constants;
 
 public class GmWorkActivity extends Activity {
-
-	static {
-
-	}
-
-	private Button mPlayBtn;
-	private Button mHowToPlayBtn;
-	private Button mAboutBtn;
+	private ImageButton mPlayBtn;
+	private ImageButton mHowToPlayBtn;
+	private ImageButton mAboutBtn;
 	private Context mContext;
 	private ImageButton mSpeakerImageBtn;
 	private SoundPool soundPool;
@@ -173,9 +168,9 @@ public class GmWorkActivity extends Activity {
 		//
 		// }
 
-		mPlayBtn = (Button) findViewById(R.id.play_btn);
-		mHowToPlayBtn = (Button) findViewById(R.id.howtoplay_btn);
-		mAboutBtn = (Button) findViewById(R.id.about_btn);
+		mPlayBtn = (ImageButton) findViewById(R.id.play_btn);
+		mHowToPlayBtn = (ImageButton) findViewById(R.id.howtoplay_btn);
+		mAboutBtn = (ImageButton) findViewById(R.id.about_btn);
 		mSpeakerImageBtn = (ImageButton) findViewById(R.id.speaker);
 		mContext = this;
 
