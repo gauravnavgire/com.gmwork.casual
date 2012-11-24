@@ -90,46 +90,46 @@ public class GmWorkActivity extends Activity {
 		/*
 		 * Only call authorize if the access_token has expired.
 		 */
-		if (!facebook.isSessionValid()) {
-			/**
-			 * facebook authorization
-			 */
-			facebook.authorize(this, Constants.FACEBOOK_PERMISSIONS,
-					new DialogListener() {
-
-						@Override
-						public void onComplete(Bundle values) {
-							// TODO Auto-generated method stub
-							SharedPreferences.Editor editor = mSharedPref
-									.edit();
-							editor.putString("access_token",
-									facebook.getAccessToken());
-							editor.putLong("access_expires",
-									facebook.getAccessExpires());
-							editor.commit();
-
-						}
-
-						@Override
-						public void onFacebookError(FacebookError e) {
-							// TODO Auto-generated method stub
-
-						}
-
-						@Override
-						public void onError(DialogError e) {
-							// TODO Auto-generated method stub
-
-						}
-
-						@Override
-						public void onCancel() {
-							// TODO Auto-generated method stub
-
-						}
-
-					});
-		}
+//		if (!facebook.isSessionValid()) {
+//			/**
+//			 * facebook authorization
+//			 */
+//			facebook.authorize(this, Constants.FACEBOOK_PERMISSIONS,
+//					new DialogListener() {
+//
+//						@Override
+//						public void onComplete(Bundle values) {
+//							// TODO Auto-generated method stub
+//							SharedPreferences.Editor editor = mSharedPref
+//									.edit();
+//							editor.putString("access_token",
+//									facebook.getAccessToken());
+//							editor.putLong("access_expires",
+//									facebook.getAccessExpires());
+//							editor.commit();
+//
+//						}
+//
+//						@Override
+//						public void onFacebookError(FacebookError e) {
+//							// TODO Auto-generated method stub
+//
+//						}
+//
+//						@Override
+//						public void onError(DialogError e) {
+//							// TODO Auto-generated method stub
+//
+//						}
+//
+//						@Override
+//						public void onCancel() {
+//							// TODO Auto-generated method stub
+//
+//						}
+//
+//					});
+//		}
 
 		mInputFile = "/mnt/sdcard/movie.xls";
 		// load movie DB

@@ -17,36 +17,36 @@
             android:layout_width="130dip"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:background="@android:color/black"
             android:gravity="left|bottom"
             android:paddingLeft="10dip"
             android:text="Tries Left : 5"
             android:textColor="#FF0000"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:typeface="sans" 
-            android:background="@android:color/black"/>
+            android:typeface="sans" />
 
         <ImageButton
             android:id="@+id/speaker"
             android:layout_width="50dip"
             android:layout_height="50dip"
             android:layout_gravity="center"
+            android:background="@android:color/black"
             android:paddingBottom="1dip"
-            android:src="@drawable/speaker_button"
-            android:background="@android:color/black" />
+            android:src="@drawable/speaker_button" />
 
         <TextView
             android:id="@+id/countdown"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
+            android:background="@android:color/black"
             android:gravity="right|bottom"
             android:paddingRight="10dip"
-            android:text="Time : 30 secs"
+            android:text="Time : "
             android:textColor="#FF0000"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:typeface="sans" 
-            android:background="@android:color/black"/>
+            android:typeface="sans" />
     </LinearLayout>
 
     <ImageView
@@ -70,7 +70,19 @@
         android:textColorHighlight="#E9EB2B"
         android:textSize="30sp"
         android:textStyle="italic"
-        android:typeface="serif" />
+        android:typeface="serif"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="40dip"
+        android:layout_marginTop="40dip"
+        android:background="@android:color/black"
+        android:text="Start?"
+        android:textColor="@android:color/white" />
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -88,181 +100,263 @@
 
                 <Button
                     android:layout_column="1"
-                    android:padding="3dip"
-                    android:text="@string/A" 
+                    android:background="@android:color/transparent"
+                    android:text="@string/A"
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
                     android:textStyle="bold"
-                    android:background="@android:color/transparent"/>
+                    android:typeface="sans"
+                    style="@android:style/Widget.DeviceDefault.Light.Button.Borderless.Small" />
 
                 <Button
                     android:layout_column="2"
-                    android:padding="3dip"
-                    android:text="@string/B" 
-                    android:background="@android:color/transparent"/>
+                    android:background="@android:color/transparent"
+                    android:text="@string/B"
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="3"
-                    android:padding="3dip"
-                    android:text="@string/C" 
-                    android:background="@android:color/transparent"/>
+                    android:background="@android:color/transparent"
+                    android:text="@string/C"
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="4"
-                    android:padding="3dip"
-                    android:text="@string/D" 
-                    android:background="@android:color/transparent"/>
+                    android:background="@android:color/transparent"
+                    android:text="@string/D"
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="5"
-                    android:padding="3dip"
-                    android:text="@string/E" 
-                    android:background="@android:color/transparent"/>
+                    android:background="@android:color/transparent"
+                    android:text="@string/E"
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
             </TableRow>
 
             <TableRow>
 
                 <Button
                     android:layout_column="1"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/F"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="2"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/G"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="3"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/H"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="4"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/I"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="5"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/J"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
             </TableRow>
 
             <TableRow>
 
                 <Button
                     android:layout_column="1"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/K"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="2"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/L"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="3"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/M"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="4"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/N"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="5"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/O"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
             </TableRow>
 
             <TableRow>
 
                 <Button
                     android:layout_column="1"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/P"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="2"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/Q"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="3"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/R"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="4"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/S"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="5"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/T"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
             </TableRow>
 
             <TableRow>
 
                 <Button
                     android:layout_column="1"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/U"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="2"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/V"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="3"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/W"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="4"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/X"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
                 <Button
                     android:layout_column="5"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/Y"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
             </TableRow>
 
             <TableRow>
 
                 <Button
                     android:layout_column="1"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/Z"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" 
+                    style="@android:style/Widget.ImageButton"/>
 
                 <Button
                     android:layout_column="1"
-                    android:padding="3dip"
+                    android:background="@android:color/transparent"
                     android:text="@string/guess"
-                    android:background="@android:color/transparent" />
+                    android:textColor="#68BB6B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
             </TableRow>
         </TableLayout>
     </ScrollView>

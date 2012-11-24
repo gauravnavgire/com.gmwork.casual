@@ -16,6 +16,7 @@ import android.database.Cursor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,11 +35,12 @@ import android.widget.TextView;
 
 import com.gmwork.casual.database.ContentDescriptor;
 
-public class PlayBoardActivity extends Activity {
+public class PlayBoardActivity extends Activity implements OnClickListener {
 	private TableLayout mTableLayout;
 	private static String LOG_TAG = "PlayBoardActivity";
 	private TableRow mTableRow;
 	private Button mAlphaButton;
+	private Button mStart;
 	private TextView mHiddenMovie;
 	private int mIndex;
 	private boolean isGameWon;
@@ -46,12 +48,14 @@ public class PlayBoardActivity extends Activity {
 	private LinearLayout mLinearLayout;
 	private ImageView mBollyLogo;
 	private TextView mTriesView;
+	private TextView mCountdown;
 	private MediaPlayer mediaPlayer;
 	private boolean isMusicPlaying = true;
 	private ImageButton mSpeakerImageBtn;
 	static final int DIALOG_CANCEL_ID = 0;
 	static final int DIALOG_GUESS_ID = 1;
 	private String mMovie;
+	private CountDownTimer mCountdownTimer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +96,7 @@ public class PlayBoardActivity extends Activity {
 
 		final StringBuffer movieBuffer;
 		mTriesView = (TextView) findViewById(R.id.tries);
+		mCountdown = (TextView) findViewById(R.id.countdown);
 		mSpeakerImageBtn = (ImageButton) findViewById(R.id.speaker);
 		mLinearLayout = (LinearLayout) findViewById(R.id.playboardlayout);
 		Animation backgroundAnimation = AnimationUtils.loadAnimation(this,
@@ -105,6 +110,9 @@ public class PlayBoardActivity extends Activity {
 
 		mTableLayout = (TableLayout) findViewById(R.id.alphabet_table);
 		mHiddenMovie = (TextView) findViewById(R.id.hiddenmovie);
+
+		mStart = (Button) findViewById(R.id.start);
+		mStart.setOnClickListener(this);
 
 		int count = 0;
 		char[] charMovieArray = mMovie.toCharArray();
@@ -209,6 +217,9 @@ public class PlayBoardActivity extends Activity {
 								isGameWon = false;
 							}
 							if (isGameWon) {
+								if (mCountdownTimer != null) {
+									mCountdownTimer.cancel();
+								}
 								String wonmsg = getResources().getString(
 										R.string.won_message)
 										+ " " + mMovie;
@@ -235,18 +246,10 @@ public class PlayBoardActivity extends Activity {
 							mTries--;
 							mTriesView.setText("Tries Left : " + mTries);
 							if (mTries == 0) {
-								String lostmsg = getResources().getString(
-										R.string.lost_message)
-										+ " " + mMovie;
-								Builder dialog = new AlertDialog.Builder(
-										PlayBoardActivity.this)
-										.setIcon(
-												android.R.drawable.ic_dialog_info)
-										.setTitle(R.string.game_lost)
-										.setMessage(lostmsg)
-										.setNegativeButton(R.string.main_page,
-												mDataButtonListener);
-								dialog.show();
+								if (mCountdownTimer != null) {
+									mCountdownTimer.cancel();
+								}
+								lost();
 							}
 
 							Button button = (Button) v;
@@ -346,17 +349,7 @@ public class PlayBoardActivity extends Activity {
 							dialog.show();
 
 						} else {
-							String lostmsg = getResources().getString(
-									R.string.lost_message)
-									+ " " + mMovie;
-							Builder dialog = new AlertDialog.Builder(
-									PlayBoardActivity.this)
-									.setIcon(android.R.drawable.ic_dialog_info)
-									.setTitle(R.string.game_lost)
-									.setMessage(lostmsg)
-									.setNegativeButton(R.string.main_page,
-											mDataButtonListener);
-							dialog.show();
+							lost();
 						}
 					}
 				}
@@ -395,6 +388,9 @@ public class PlayBoardActivity extends Activity {
 
 	protected void onResume() {
 		super.onResume();
+		if (mCountdownTimer != null) {
+			mCountdownTimer.start();
+		}
 		if (mediaPlayer != null) {
 			// mediaPlayer.start();
 		}
@@ -402,6 +398,11 @@ public class PlayBoardActivity extends Activity {
 
 	protected void onPause() {
 		super.onPause();
+		// cancel the countdown timer and make note of the current coutn down
+		// time
+		if (mCountdownTimer != null) {
+			mCountdownTimer.cancel();
+		}
 		if (mediaPlayer != null) {
 			mediaPlayer.pause();
 			if (isFinishing()) {
@@ -410,4 +411,52 @@ public class PlayBoardActivity extends Activity {
 			}
 		}
 	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.start:
+			mStart.setVisibility(View.GONE);
+			mHiddenMovie.setVisibility(View.VISIBLE);
+			mCountdownTimer = new CountDownTimer(30000, 1000) {
+
+				@Override
+				public void onTick(long millisUntilFinished) {
+					mCountdown.setText("Time : " + (millisUntilFinished / 1000)
+							+ " secs");
+
+				}
+
+				@Override
+				public void onFinish() {
+					lost();
+				}
+			}.start();
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
+	public void lost() {
+		String lostmsg = getResources().getString(R.string.lost_message) + " "
+				+ mMovie;
+		Builder dialog = new AlertDialog.Builder(PlayBoardActivity.this)
+				.setIcon(android.R.drawable.ic_dialog_info)
+				.setTitle(R.string.game_lost).setMessage(lostmsg)
+				.setNegativeButton(R.string.main_page, mDataButtonListener);
+		dialog.setCancelable(false);
+		dialog.show();
+	}
+
+	@Override
+	protected void onDestroy() {
+		if (mCountdownTimer != null) {
+			mCountdownTimer.cancel();
+		}
+		super.onDestroy();
+	}
+
 }
