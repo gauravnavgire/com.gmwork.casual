@@ -85,9 +85,11 @@
         android:textColor="@android:color/white" />
 
     <ScrollView
+        android:id="@+id/alphascroll"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/transp_bg" >
+        android:background="@drawable/transp_bg"
+        android:clickable="false" >
 
         <TableLayout
             android:id="@+id/alphabet_table"

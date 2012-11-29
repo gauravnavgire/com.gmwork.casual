@@ -30,14 +30,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.facebook.android.AsyncFacebookRunner;
-import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
-import com.facebook.android.Facebook.DialogListener;
-import com.facebook.android.FacebookError;
 import com.gmwork.casual.database.ContentDescriptor;
 import com.gmwork.casual.utilities.Constants;
 
@@ -148,25 +144,26 @@ public class GmWorkActivity extends Activity {
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		soundPool = new SoundPool(20, AudioManager.STREAM_MUSIC, 0);
 
-		// try {
-		// AssetManager assetManager = getAssets();
-		// AssetFileDescriptor descriptor = assetManager
-		// .openFd("main_background_music.mp3");
-		// musicId = soundPool.load(descriptor, 0);
-		// mediaPlayer.setDataSource(descriptor.getFileDescriptor(),
-		// descriptor.getStartOffset(), descriptor.getLength());
-		// mediaPlayer.prepare();
-		// mediaPlayer.setLooping(true);
-		// } catch (IOException e) {
-		// Log.d(LOG_TAG,
-		// "Couldn't load sound effect from asset, " + e.getMessage());
-		// mediaPlayer = null;
-		//
-		// } catch (IllegalStateException e) {
-		// Log.d(LOG_TAG, "Couldn't load music from asset, " + e.getMessage());
-		// mediaPlayer = null;
-		//
-		// }
+		try {
+			AssetManager assetManager = getAssets();
+			AssetFileDescriptor descriptor = assetManager
+					.openFd("main_background_music.mp3");
+			//musicId = soundPool.load(descriptor, 0);
+
+			mediaPlayer.setDataSource(descriptor.getFileDescriptor(),
+					descriptor.getStartOffset(), descriptor.getLength());
+			mediaPlayer.prepare();
+			//mediaPlayer.setLooping(true);
+		} catch (IOException e) {
+			Log.d(LOG_TAG,
+					"Couldn't load sound effect from asset, " + e.getMessage());
+			mediaPlayer = null;
+
+		} catch (IllegalStateException e) {
+			Log.d(LOG_TAG, "Couldn't load music from asset, " + e.getMessage());
+			mediaPlayer = null;
+
+		}
 
 		mPlayBtn = (ImageButton) findViewById(R.id.play_btn);
 		mHowToPlayBtn = (ImageButton) findViewById(R.id.howtoplay_btn);
@@ -268,7 +265,7 @@ public class GmWorkActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		if (mediaPlayer != null) {
-			// mediaPlayer.start();
+			 mediaPlayer.start();
 		}
 	}
 

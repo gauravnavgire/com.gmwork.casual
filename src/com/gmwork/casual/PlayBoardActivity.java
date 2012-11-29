@@ -29,6 +29,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -56,6 +57,7 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 	static final int DIALOG_GUESS_ID = 1;
 	private String mMovie;
 	private CountDownTimer mCountdownTimer;
+	private ScrollView mAplhaScrollView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,29 +74,30 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		mediaPlayer = new MediaPlayer();
-		// try {
-		// AssetManager assetManager = getAssets();
-		// AssetFileDescriptor descriptor = assetManager
-		// .openFd("main_background_music.mp3");
-		// mediaPlayer.setDataSource(descriptor.getFileDescriptor(),
-		// descriptor.getStartOffset(), descriptor.getLength());
-		// mediaPlayer.prepare();
-		// mediaPlayer.setLooping(true);
-		// } catch (IOException e) {
-		// Log.d(LOG_TAG,
-		// "Couldn't load sound effect from asset, " + e.getMessage());
-		// mediaPlayer = null;
-		//
-		// } catch (IllegalStateException e) {
-		// Log.d(LOG_TAG, "Couldn't load music from asset, " + e.getMessage());
-		// mediaPlayer = null;
-		//
-		// }
+		try {
+			AssetManager assetManager = getAssets();
+			AssetFileDescriptor descriptor = assetManager
+					.openFd("main_background_music.mp3");
+			mediaPlayer.setDataSource(descriptor.getFileDescriptor(),
+					descriptor.getStartOffset(), descriptor.getLength());
+			mediaPlayer.prepare();
+			mediaPlayer.setLooping(true);
+		} catch (IOException e) {
+			Log.d(LOG_TAG,
+					"Couldn't load sound effect from asset, " + e.getMessage());
+			mediaPlayer = null;
+
+		} catch (IllegalStateException e) {
+			Log.d(LOG_TAG, "Couldn't load music from asset, " + e.getMessage());
+			mediaPlayer = null;
+
+		}
 
 		/** Get the Movie **/
 		mMovie = getMovie();
 
 		final StringBuffer movieBuffer;
+		mAplhaScrollView = (ScrollView) findViewById(R.id.alphascroll);
 		mTriesView = (TextView) findViewById(R.id.tries);
 		mCountdown = (TextView) findViewById(R.id.countdown);
 		mSpeakerImageBtn = (ImageButton) findViewById(R.id.speaker);
@@ -416,6 +419,7 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.start:
+			mAplhaScrollView.setClickable(true);
 			mStart.setVisibility(View.GONE);
 			mHiddenMovie.setVisibility(View.VISIBLE);
 			mCountdownTimer = new CountDownTimer(30000, 1000) {
