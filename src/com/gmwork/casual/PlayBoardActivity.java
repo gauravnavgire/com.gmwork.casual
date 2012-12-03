@@ -10,9 +10,11 @@ import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -58,6 +60,12 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 	private String mMovie;
 	private CountDownTimer mCountdownTimer;
 	private ScrollView mAplhaScrollView;
+	private long mMaxCountdownTime = 40000;
+	private long mCountdownDecrement = 1000;
+	private long mCurrentCountdownTime = -1;
+	private static final String HIGHSCORE = "highscore";
+	private SharedPreferences mHighscorePref;
+	private SharedPreferences.Editor mHighscoreEditor;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +74,38 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 
 		// Remove title bar
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
 		// Remove notification bar
 		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.playboard);
-
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+		mAplhaScrollView = (ScrollView) findViewById(R.id.alphascroll);
+		mTriesView = (TextView) findViewById(R.id.tries);
+		mCountdown = (TextView) findViewById(R.id.countdown);
+		mSpeakerImageBtn = (ImageButton) findViewById(R.id.speaker);
+		mLinearLayout = (LinearLayout) findViewById(R.id.playboardlayout);
+		Animation backgroundAnimation = AnimationUtils.loadAnimation(this,
+				R.anim.background_alpha);
+		mLinearLayout.startAnimation(backgroundAnimation);
+		mBollyLogo = (ImageView) findViewById(R.id.bollylogo);
+		Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(this,
+				R.anim.bollylogo_anim);
+		mBollyLogo.startAnimation(hyperspaceJumpAnimation);
+		mTableLayout = (TableLayout) findViewById(R.id.alphabet_table);
+		mHiddenMovie = (TextView) findViewById(R.id.hiddenmovie);
+		mStart = (Button) findViewById(R.id.start);
+		mStart.setOnClickListener(this);
+		mSpeakerImageBtn.setOnClickListener(this);
+		setupMusic();
+		reset();
+		gameProgress();
+
+		mHighscorePref = getSharedPreferences(HIGHSCORE, MODE_PRIVATE);
+		mHighscoreEditor = mHighscorePref.edit();
+	}
+
+	private void setupMusic() {
 		mediaPlayer = new MediaPlayer();
 		try {
 			AssetManager assetManager = getAssets();
@@ -93,68 +126,15 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 
 		}
 
-		/** Get the Movie **/
-		mMovie = getMovie();
+	}
 
-		final StringBuffer movieBuffer;
-		mAplhaScrollView = (ScrollView) findViewById(R.id.alphascroll);
-		mTriesView = (TextView) findViewById(R.id.tries);
-		mCountdown = (TextView) findViewById(R.id.countdown);
-		mSpeakerImageBtn = (ImageButton) findViewById(R.id.speaker);
-		mLinearLayout = (LinearLayout) findViewById(R.id.playboardlayout);
-		Animation backgroundAnimation = AnimationUtils.loadAnimation(this,
-				R.anim.background_alpha);
-		mLinearLayout.startAnimation(backgroundAnimation);
-
-		mBollyLogo = (ImageView) findViewById(R.id.bollylogo);
-		Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(this,
-				R.anim.bollylogo_anim);
-		mBollyLogo.startAnimation(hyperspaceJumpAnimation);
-
-		mTableLayout = (TableLayout) findViewById(R.id.alphabet_table);
-		mHiddenMovie = (TextView) findViewById(R.id.hiddenmovie);
-
-		mStart = (Button) findViewById(R.id.start);
-		mStart.setOnClickListener(this);
-
-		int count = 0;
-		char[] charMovieArray = mMovie.toCharArray();
-
-		/**
-		 * Starting the backgound music
-		 * 
-		 */
-		mSpeakerImageBtn.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (isMusicPlaying) {
-					Log.d(LOG_TAG, "Stopping the background music in OnClick");
-					mediaPlayer.stop();
-					isMusicPlaying = false;
-				} else {
-					Log.d(LOG_TAG, "Starting the background music in OnClick");
-					try {
-						mediaPlayer.prepare();
-						mediaPlayer.start();
-						isMusicPlaying = true;
-					} catch (IllegalStateException e) {
-
-						Log.d(LOG_TAG,
-								"Couldn't load music from asset, "
-										+ e.getMessage());
-					} catch (IOException e) {
-
-						Log.d(LOG_TAG,
-								"Couldn't load music from asset, "
-										+ e.getMessage());
-					}
-
-				}
-			}
-		});
-
+	private void reset() {
+		mAplhaScrollView.setClickable(false);
+		mStart.setVisibility(View.VISIBLE);
+		mHiddenMovie.setVisibility(View.GONE);
 		// Reset playfield
+		mCurrentCountdownTime = mMaxCountdownTime / 1000;
+		mCountdown.setText("Time : " + mCurrentCountdownTime + " secs");
 		mTries = 5;
 		/** Set all buttons clickable **/
 		for (int i = 0; i < mTableLayout.getChildCount(); i++) {
@@ -162,11 +142,16 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 			for (int j = 0; j < mTableRow.getChildCount(); j++) {
 				mAlphaButton = (Button) mTableRow.getChildAt(j);
 				if (mAlphaButton.isClickable()) {
+					mAlphaButton.setVisibility(View.VISIBLE);
 					mAlphaButton.setClickable(true);
+					mAlphaButton.setTextColor(Color.parseColor("#68BB6B"));
 				}
 			}
 		}
 		/** Get new Movie with a random logic **/
+		mMovie = getMovie();
+		int count = 0;
+		char[] charMovieArray = mMovie.toCharArray();
 		mHiddenMovie.setText("");
 		/** Set the hidden movie **/
 		do {
@@ -177,9 +162,11 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 			}
 			count++;
 		} while (count != charMovieArray.length);
+	}
 
-		movieBuffer = new StringBuffer(mHiddenMovie.getText());
-
+	private void gameProgress() {
+		final StringBuffer movieBuffer = new StringBuffer(
+				mHiddenMovie.getText());
 		Log.d(LOG_TAG, "Table childs or rows = " + mTableLayout.getChildCount());
 
 		for (int i = 0; i < mTableLayout.getChildCount(); i++) {
@@ -220,24 +207,7 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 								isGameWon = false;
 							}
 							if (isGameWon) {
-								if (mCountdownTimer != null) {
-									mCountdownTimer.cancel();
-								}
-								String wonmsg = getResources().getString(
-										R.string.won_message)
-										+ " " + mMovie;
-								Builder dialog = new AlertDialog.Builder(
-										PlayBoardActivity.this)
-										.setIcon(
-												android.R.drawable.ic_dialog_info)
-										.setTitle(R.string.congrats_title)
-										.setMessage(wonmsg)
-										.setPositiveButton(
-												R.string.continue_button,
-												mDataButtonListener)
-										.setNegativeButton(R.string.main_page,
-												mDataButtonListener);
-								dialog.show();
+								won();
 							}
 							Button button = (Button) v;
 							button.setTextColor(getResources().getColor(
@@ -265,9 +235,44 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 						}
 
 					}
+
 				});
 			}
 		}
+
+	}
+
+	private void won() {
+		long totalScore = 0;
+		long timeBonus = 0;
+		long movesBonus = 0;
+
+		if (mCountdownTimer != null) {
+			mCountdownTimer.cancel();
+		}
+
+		if (mCurrentCountdownTime != -1) {
+			timeBonus = mCurrentCountdownTime * 10;
+			movesBonus = mTries * 10;
+			totalScore = mHighscorePref.getLong("totalScore", 0) + timeBonus
+					+ movesBonus;
+		}
+		mHighscoreEditor.putString("player", "Gaurav");
+		mHighscoreEditor.putLong("guessbonus", 0);
+		mHighscoreEditor.putLong("timeBonus", timeBonus);
+		mHighscoreEditor.putLong("movesBonus", movesBonus);
+		mHighscoreEditor.putLong("totalScore", totalScore);
+		mHighscoreEditor.commit();
+		String wonmsg = getResources().getString(R.string.won_message) + " "
+				+ mMovie + " \n Total Points = " + totalScore;
+		Builder dialog = new AlertDialog.Builder(PlayBoardActivity.this)
+				.setIcon(android.R.drawable.ic_dialog_info)
+				.setTitle(R.string.congrats_title)
+				.setMessage(wonmsg)
+				.setPositiveButton(R.string.continue_button,
+						mDataButtonListener)
+				.setNegativeButton(R.string.main_page, mDataButtonListener);
+		dialog.show();
 
 	}
 
@@ -373,12 +378,7 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 			switch (which) {
 			case DialogInterface.BUTTON_POSITIVE:
 				dialog.dismiss();
-				Intent playIntent = new Intent(PlayBoardActivity.this,
-						PlayBoardActivity.class);
-				playIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-				startActivity(playIntent);
-				finish();
-				overridePendingTransition(0, 0);
+				reset();
 				break;
 			case DialogInterface.BUTTON_NEGATIVE:
 				dialog.dismiss();
@@ -395,13 +395,13 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 			mCountdownTimer.start();
 		}
 		if (mediaPlayer != null) {
-			// mediaPlayer.start();
+			mediaPlayer.start();
 		}
 	}
 
 	protected void onPause() {
 		super.onPause();
-		// cancel the countdown timer and make note of the current coutn down
+		// cancel the countdown timer and make note of the current count down
 		// time
 		if (mCountdownTimer != null) {
 			mCountdownTimer.cancel();
@@ -422,21 +422,54 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 			mAplhaScrollView.setClickable(true);
 			mStart.setVisibility(View.GONE);
 			mHiddenMovie.setVisibility(View.VISIBLE);
-			mCountdownTimer = new CountDownTimer(30000, 1000) {
+			if (mCountdownTimer == null) {
+				mCountdownTimer = new CountDownTimer(mMaxCountdownTime,
+						mCountdownDecrement) {
 
-				@Override
-				public void onTick(long millisUntilFinished) {
-					mCountdown.setText("Time : " + (millisUntilFinished / 1000)
-							+ " secs");
+					@Override
+					public void onTick(long millisUntilFinished) {
+						mCurrentCountdownTime = millisUntilFinished / 1000;
+						mCountdown.setText("Time : " + mCurrentCountdownTime
+								+ " secs");
+					}
 
-				}
-
-				@Override
-				public void onFinish() {
-					lost();
-				}
-			}.start();
+					@Override
+					public void onFinish() {
+						mCurrentCountdownTime = -1;
+						lost();
+					}
+				}.start();
+			} else {
+				mCurrentCountdownTime = mMaxCountdownTime / 1000;
+				mCountdown.setText("Time : " + mCurrentCountdownTime + " secs");
+				mCountdownTimer.cancel();
+				mCountdownTimer.start();
+			}
 			break;
+
+		case R.id.speaker:
+
+			if (isMusicPlaying) {
+				Log.d(LOG_TAG, "Stopping the background music in OnClick");
+				mediaPlayer.stop();
+				isMusicPlaying = false;
+			} else {
+				Log.d(LOG_TAG, "Starting the background music in OnClick");
+				try {
+					mediaPlayer.prepare();
+					mediaPlayer.start();
+					isMusicPlaying = true;
+				} catch (IllegalStateException e) {
+
+					Log.d(LOG_TAG,
+							"Couldn't load music from asset, " + e.getMessage());
+				} catch (IOException e) {
+
+					Log.d(LOG_TAG,
+							"Couldn't load music from asset, " + e.getMessage());
+				}
+
+			}
 
 		default:
 			break;

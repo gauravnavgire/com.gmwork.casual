@@ -238,12 +238,16 @@ public class GmWorkActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 
-				Builder dialog = new AlertDialog.Builder(GmWorkActivity.this)
-						.setIcon(android.R.drawable.ic_dialog_info)
-						.setTitle(R.string.about_title)
-						.setMessage(R.string.about_message)
-						.setNegativeButton(R.string.ok, mDataButtonListener);
-				dialog.show();
+//				Builder dialog = new AlertDialog.Builder(GmWorkActivity.this)
+//						.setIcon(android.R.drawable.ic_dialog_info)
+//						.setTitle(R.string.about_title)
+//						.setMessage(R.string.about_message)
+//						.setNegativeButton(R.string.ok, mDataButtonListener);
+//				dialog.show();
+				Intent playIntent = new Intent(mContext,
+						Highscore.class);
+				playIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+				startActivity(playIntent);
 			}
 		});
 

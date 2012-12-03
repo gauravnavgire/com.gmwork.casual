@@ -12,37 +12,49 @@
         android:scaleType="fitXY"
         android:src="@drawable/bollywood_logo" />
 
-    <ImageButton
+    <Button
         android:id="@+id/play_btn"
+        style="@style/mainmenu_button_Text"
         android:layout_width="150dip"
-        android:layout_marginTop="50dip"
-        android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:src="@drawable/play"
-        android:background="@android:color/transparent"/>
+        android:layout_gravity="center"
+        android:layout_marginTop="50dip"
+        android:background="@drawable/mainmenu_button"
+        android:text="Play" />
+
+    <Button
+        android:id="@+id/howtoplay_btn"
+        style="@style/mainmenu_button_Text"
+        android:layout_width="150dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/mainmenu_button"
+        android:text="How to play" />
+
+    <Button
+        android:id="@+id/highscore_btn"
+        style="@style/mainmenu_button_Text"
+        android:layout_width="150dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/mainmenu_button"
+        android:text="Highscores" />
+
+    <Button
+        android:id="@+id/about_btn"
+        style="@style/mainmenu_button_Text"
+        android:layout_width="150dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/mainmenu_button"
+        android:text="About" />
 
     <ImageButton
-        android:id="@+id/howtoplay_btn"
-        android:layout_width="150dip"
-        android:layout_gravity="center"
-        android:layout_height="wrap_content"
-        android:src="@drawable/howto" 
-        android:background="@android:color/transparent"/>
-    
-    <ImageButton
-        android:id="@+id/about_btn"
-        android:layout_gravity="center"
-        android:layout_width="150dip"
-        android:layout_height="wrap_content"
-        android:src="@drawable/about"
-        android:background="@android:color/transparent" />
-    
-    <ImageButton android:id="@+id/speaker"
+        android:id="@+id/speaker"
         android:layout_width="50dip"
         android:layout_height="50dip"
         android:background="@android:color/transparent"
-        android:src="@drawable/speaker_button"
         android:paddingBottom="1dip"
-        android:layout_gravity="bottom|left"/>
+        android:src="@drawable/speaker_button" />
 
 </LinearLayout>

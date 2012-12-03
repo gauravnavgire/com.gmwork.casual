@@ -30,6 +30,10 @@
             android:name=".PlayBoardActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name=".Highscore"
+            android:label="@string/howtoplay" >
+        </activity>
 
         <provider
             android:name="com.gmwork.casual.database.MovieProvider"
