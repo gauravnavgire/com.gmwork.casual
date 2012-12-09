@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TableLayout;
+import android.widget.TableLayout.LayoutParams;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -45,7 +46,9 @@ public class Highscore extends Activity {
 		Set<?> set = highscores.entrySet();
 		Iterator<?> it = set.iterator();
 		TableRow row = new TableRow(this);
-		while (it.hasNext()) {
+		row.setLayoutParams(new TableRow.LayoutParams());
+
+/*		while (it.hasNext()) {
 			Map.Entry<String, ?> scores = (Entry<String, ?>) it.next();
 			Log.d("GAURAV", " KEY = " + scores.getKey() + " , VALUE = "
 					+ scores.getValue());
@@ -72,30 +75,9 @@ public class Highscore extends Activity {
 				row.addView(total);
 			}
 
-		}
+		}*/
+		total.setText("3000");
+		row.addView(total);
 		highscoreTable.addView(row);
-
-		// for (Entry<String, ?> scores : set) {
-		// if (scores.getKey().equals("player")) {
-		//
-		// } else if (scores.getKey().equals("guessbonus")) {
-		//
-		// } else if (scores.getKey().equals("timeBonus")) {
-		//
-		// } else if (scores.getKey().equals("movesBonus")) {
-		//
-		// } else if (scores.getKey().equals("totalScore")) {
-		//
-		// }
-		//
-		// TableRow row = new TableRow(this);
-		// row.addView(name, 1);
-		// row.addView(movebonus, 2);
-		// row.addView(timebonus, 3);
-		// row.addView(guessbonus, 4);
-		// row.addView(total, 5);
-		// highscoreTable.addView(row);
-		// }
-
 	}
 }

@@ -57,6 +57,7 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 	private ImageButton mSpeakerImageBtn;
 	static final int DIALOG_CANCEL_ID = 0;
 	static final int DIALOG_GUESS_ID = 1;
+	static final int DIALOG_PLAYER_NAME = 2;
 	private String mMovie;
 	private CountDownTimer mCountdownTimer;
 	private ScrollView mAplhaScrollView;
@@ -64,8 +65,9 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 	private long mCountdownDecrement = 1000;
 	private long mCurrentCountdownTime = -1;
 	private static final String HIGHSCORE = "highscore";
-	private SharedPreferences mHighscorePref;
-	private SharedPreferences.Editor mHighscoreEditor;
+	private static final String PLAYERNAME = "playername";
+	private SharedPreferences mHighscorePref,mPlayerNamePref;
+	private SharedPreferences.Editor mHighscoreEditor,mPlayerNameEditor;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +105,9 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 
 		mHighscorePref = getSharedPreferences(HIGHSCORE, MODE_PRIVATE);
 		mHighscoreEditor = mHighscorePref.edit();
+		
+		mPlayerNamePref = getSharedPreferences(PLAYERNAME, MODE_PRIVATE);
+		mPlayerNameEditor = mPlayerNamePref.edit();
 	}
 
 	private void setupMusic() {
@@ -134,14 +139,15 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 		mHiddenMovie.setVisibility(View.GONE);
 		// Reset playfield
 		mCurrentCountdownTime = mMaxCountdownTime / 1000;
-		mCountdown.setText("Time : " + mCurrentCountdownTime + " secs");
 		mTries = 5;
+		mCountdown.setText("Time : " + mCurrentCountdownTime + " secs");
+		mTriesView.setText("Tries Left : " + mTries);
 		/** Set all buttons clickable **/
 		for (int i = 0; i < mTableLayout.getChildCount(); i++) {
 			mTableRow = (TableRow) mTableLayout.getChildAt(i);
 			for (int j = 0; j < mTableRow.getChildCount(); j++) {
 				mAlphaButton = (Button) mTableRow.getChildAt(j);
-				if (mAlphaButton.isClickable()) {
+				if (!mAlphaButton.isClickable()) {
 					mAlphaButton.setVisibility(View.VISIBLE);
 					mAlphaButton.setClickable(true);
 					mAlphaButton.setTextColor(Color.parseColor("#68BB6B"));
@@ -364,6 +370,32 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 			});
 
 			break;
+		case DIALOG_PLAYER_NAME:
+			// do the work to define the guess Dialog
+			dialog = new Dialog(PlayBoardActivity.this);
+			dialog.setContentView(R.layout.guessdialog);
+			dialog.setTitle(R.string.guess_title);
+			final EditText playername = (EditText) dialog
+					.findViewById(R.id.guess_word);
+			Button name = (Button) dialog.findViewById(R.id.guess);
+			Button cancel = (Button) dialog.findViewById(R.id.cancel);
+			cancel.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					dismissDialog(DIALOG_PLAYER_NAME);
+					onBackPressed();
+				}
+			});
+			name.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					
+				}
+			});
+
+			break;
 		default:
 			dialog = null;
 		}
@@ -453,6 +485,8 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 				Log.d(LOG_TAG, "Stopping the background music in OnClick");
 				mediaPlayer.stop();
 				isMusicPlaying = false;
+				mSpeakerImageBtn.setBackground(getResources().getDrawable(
+						R.drawable.speaker_off));
 			} else {
 				Log.d(LOG_TAG, "Starting the background music in OnClick");
 				try {
@@ -468,7 +502,8 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 					Log.d(LOG_TAG,
 							"Couldn't load music from asset, " + e.getMessage());
 				}
-
+				mSpeakerImageBtn.setBackground(getResources().getDrawable(
+						R.drawable.speaker));
 			}
 
 		default:

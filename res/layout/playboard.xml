@@ -59,7 +59,8 @@
         android:background="@drawable/transp_bg"
         android:gravity="center"
         android:maxLines="5"
-        android:visibility="gone" />
+        android:visibility="gone"
+        style="@style/playboard_hiddenwordText" />
 
     <Button
         android:id="@+id/start"

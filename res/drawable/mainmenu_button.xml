@@ -7,6 +7,5 @@
      <item android:state_focused="true"
            android:drawable="@android:color/transparent" /> <!-- focused -->
      <item android:drawable="@android:color/transparent" /> <!-- default -->
-    
 
 </selector>

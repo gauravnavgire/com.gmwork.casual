@@ -2,6 +2,7 @@ package com.gmwork.casual;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import jxl.Cell;
 import jxl.Sheet;
@@ -30,6 +31,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.facebook.android.AsyncFacebookRunner;
@@ -38,9 +40,10 @@ import com.gmwork.casual.database.ContentDescriptor;
 import com.gmwork.casual.utilities.Constants;
 
 public class GmWorkActivity extends Activity {
-	private ImageButton mPlayBtn;
-	private ImageButton mHowToPlayBtn;
-	private ImageButton mAboutBtn;
+	private Button mPlayBtn;
+	private Button mHowToPlayBtn;
+	private Button mHighscoreButton;
+	private Button mAboutBtn;
 	private Context mContext;
 	private ImageButton mSpeakerImageBtn;
 	private SoundPool soundPool;
@@ -50,9 +53,10 @@ public class GmWorkActivity extends Activity {
 	private boolean isMusicPlaying = true;
 	private Cursor cur;
 	private ContentResolver contentResolver;
-	private String mInputFile;
+	private InputStream mInputFile;
 	private Facebook facebook = new Facebook(Constants.FACEBOOK_APP_ID);
 	private SharedPreferences mSharedPref;
+	private SharedPreferences.Editor mSharedPrefEditor;
 	private AsyncFacebookRunner mAsyncRunner = new AsyncFacebookRunner(facebook);
 
 	/** Called when the activity is first created. */
@@ -74,6 +78,7 @@ public class GmWorkActivity extends Activity {
 		 * Get existing access_token if any
 		 */
 		mSharedPref = getPreferences(MODE_PRIVATE);
+		mSharedPrefEditor = mSharedPref.edit();
 		String access_token = mSharedPref.getString("access_token", null);
 		long expires = mSharedPref.getLong("access_expires", 0);
 		if (access_token != null) {
@@ -86,51 +91,60 @@ public class GmWorkActivity extends Activity {
 		/*
 		 * Only call authorize if the access_token has expired.
 		 */
-//		if (!facebook.isSessionValid()) {
-//			/**
-//			 * facebook authorization
-//			 */
-//			facebook.authorize(this, Constants.FACEBOOK_PERMISSIONS,
-//					new DialogListener() {
-//
-//						@Override
-//						public void onComplete(Bundle values) {
-//							// TODO Auto-generated method stub
-//							SharedPreferences.Editor editor = mSharedPref
-//									.edit();
-//							editor.putString("access_token",
-//									facebook.getAccessToken());
-//							editor.putLong("access_expires",
-//									facebook.getAccessExpires());
-//							editor.commit();
-//
-//						}
-//
-//						@Override
-//						public void onFacebookError(FacebookError e) {
-//							// TODO Auto-generated method stub
-//
-//						}
-//
-//						@Override
-//						public void onError(DialogError e) {
-//							// TODO Auto-generated method stub
-//
-//						}
-//
-//						@Override
-//						public void onCancel() {
-//							// TODO Auto-generated method stub
-//
-//						}
-//
-//					});
-//		}
+		// if (!facebook.isSessionValid()) {
+		// /**
+		// * facebook authorization
+		// */
+		// facebook.authorize(this, Constants.FACEBOOK_PERMISSIONS,
+		// new DialogListener() {
+		//
+		// @Override
+		// public void onComplete(Bundle values) {
+		// // TODO Auto-generated method stub
+		// SharedPreferences.Editor editor = mSharedPref
+		// .edit();
+		// editor.putString("access_token",
+		// facebook.getAccessToken());
+		// editor.putLong("access_expires",
+		// facebook.getAccessExpires());
+		// editor.commit();
+		//
+		// }
+		//
+		// @Override
+		// public void onFacebookError(FacebookError e) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		// @Override
+		// public void onError(DialogError e) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		// @Override
+		// public void onCancel() {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		// });
+		// }
 
-		mInputFile = "/mnt/sdcard/movie.xls";
-		// load movie DB
-		new LoadDBTask().execute(this);
+		try {
+			mInputFile = getAssets().open("movie.xls");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
+		if (!mSharedPref.getBoolean("isdbloaded", false)) {
+			// load movie DB
+			new LoadDBTask().execute(this);
+			mSharedPrefEditor.putBoolean("isdbloaded", true);
+			mSharedPrefEditor.commit();
+		}
 		/**
 		 * Setting the background music
 		 * 
@@ -148,12 +162,12 @@ public class GmWorkActivity extends Activity {
 			AssetManager assetManager = getAssets();
 			AssetFileDescriptor descriptor = assetManager
 					.openFd("main_background_music.mp3");
-			//musicId = soundPool.load(descriptor, 0);
+			// musicId = soundPool.load(descriptor, 0);
 
 			mediaPlayer.setDataSource(descriptor.getFileDescriptor(),
 					descriptor.getStartOffset(), descriptor.getLength());
 			mediaPlayer.prepare();
-			//mediaPlayer.setLooping(true);
+			// mediaPlayer.setLooping(true);
 		} catch (IOException e) {
 			Log.d(LOG_TAG,
 					"Couldn't load sound effect from asset, " + e.getMessage());
@@ -165,9 +179,10 @@ public class GmWorkActivity extends Activity {
 
 		}
 
-		mPlayBtn = (ImageButton) findViewById(R.id.play_btn);
-		mHowToPlayBtn = (ImageButton) findViewById(R.id.howtoplay_btn);
-		mAboutBtn = (ImageButton) findViewById(R.id.about_btn);
+		mPlayBtn = (Button) findViewById(R.id.play_btn);
+		mHowToPlayBtn = (Button) findViewById(R.id.howtoplay_btn);
+		mHighscoreButton = (Button) findViewById(R.id.highscore_btn);
+		mAboutBtn = (Button) findViewById(R.id.about_btn);
 		mSpeakerImageBtn = (ImageButton) findViewById(R.id.speaker);
 		mContext = this;
 
@@ -185,12 +200,16 @@ public class GmWorkActivity extends Activity {
 						mediaPlayer.stop();
 						isMusicPlaying = false;
 					}
+					mSpeakerImageBtn.setBackground(getResources().getDrawable(
+							R.drawable.speaker_off));
 				} else {
 					Log.d(LOG_TAG, "Starting the background music in OnClick");
 					try {
 						mediaPlayer.prepare();
 						mediaPlayer.start();
 						isMusicPlaying = true;
+						mSpeakerImageBtn.setBackground(getResources()
+								.getDrawable(R.drawable.speaker));
 					} catch (IllegalStateException e) {
 
 						Log.d(LOG_TAG,
@@ -238,15 +257,21 @@ public class GmWorkActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 
-//				Builder dialog = new AlertDialog.Builder(GmWorkActivity.this)
-//						.setIcon(android.R.drawable.ic_dialog_info)
-//						.setTitle(R.string.about_title)
-//						.setMessage(R.string.about_message)
-//						.setNegativeButton(R.string.ok, mDataButtonListener);
-//				dialog.show();
-				Intent playIntent = new Intent(mContext,
-						Highscore.class);
-				playIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+				Builder dialog = new AlertDialog.Builder(GmWorkActivity.this)
+						.setIcon(android.R.drawable.ic_dialog_info)
+						.setTitle(R.string.about_title)
+						.setMessage(R.string.about_message)
+						.setNegativeButton(R.string.ok, mDataButtonListener);
+				dialog.show();
+
+			}
+		});
+
+		mHighscoreButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent playIntent = new Intent(mContext, Highscore.class);
 				startActivity(playIntent);
 			}
 		});
@@ -269,7 +294,7 @@ public class GmWorkActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		if (mediaPlayer != null) {
-			 mediaPlayer.start();
+			mediaPlayer.start();
 		}
 	}
 
@@ -292,24 +317,23 @@ public class GmWorkActivity extends Activity {
 	}
 
 	/**
-	 * This class will make api call to get the policy from the database.
+	 * This class will make api call to load the movies into database.
 	 */
 	private class LoadDBTask extends AsyncTask<Context, Void, Void> {
 		private ProgressDialog mProgressDialog;
 
 		@Override
 		protected void onPreExecute() {
-			// mProgressDialog = new ProgressDialog(GmWorkActivity.this,
-			// ProgressDialog.THEME_HOLO_DARK);
-			// mProgressDialog.setMessage("Polulating the database. Please wait");
-			// mProgressDialog.show();
-
+			mProgressDialog = new ProgressDialog(GmWorkActivity.this,
+					ProgressDialog.THEME_HOLO_DARK);
+			mProgressDialog.setMessage("Loading movies for you. Please wait");
+			mProgressDialog.show();
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			loadContent();
-			// mProgressDialog.dismiss();
+			mProgressDialog.dismiss();
 			super.onPostExecute(result);
 		}
 
@@ -329,11 +353,8 @@ public class GmWorkActivity extends Activity {
 		if (mInputFile == null) {
 			return;
 		}
-		File xlFile = new File(mInputFile);
-		Log.d("****Content****", "The xsl file <" + mInputFile + "> exists ? "
-				+ xlFile.exists());
 		try {
-			Workbook workbook = Workbook.getWorkbook(xlFile);
+			Workbook workbook = Workbook.getWorkbook(mInputFile);
 			Sheet sheet = workbook.getSheet(0);
 			for (int j = 0; j < sheet.getRows(); j++) {
 				StringBuilder movieString = new StringBuilder();
