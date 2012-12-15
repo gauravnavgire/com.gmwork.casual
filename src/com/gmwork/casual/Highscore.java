@@ -1,18 +1,25 @@
 package com.gmwork.casual;
 
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.gmwork.casual.database.ContentDescriptor;
+
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableLayout.LayoutParams;
 import android.widget.TableRow;
@@ -35,63 +42,123 @@ public class Highscore extends Activity {
 
 		mHighscorePref = getSharedPreferences(HIGHSCORE, MODE_PRIVATE);
 
-		TextView name = new TextView(this);
-		TextView movebonus = new TextView(this);
-		TextView timebonus = new TextView(this);
-		TextView guessbonus = new TextView(this);
-		TextView total = new TextView(this);
+		TableRow row;
+		TextView name;
+		TextView movebonus;
+		TextView timebonus;
+		TextView guessbonus;
+		TextView total;
 		TableLayout highscoreTable = (TableLayout) findViewById(R.id.highscore_table);
 		highscoreTable.setSoundEffectsEnabled(true);
 
-		Map<String, ?> highscores = mHighscorePref.getAll();
+		Cursor cur = getContentResolver()
+				.query(ContentDescriptor.Highscore.CONTENT_URI, null, null,
+						null, null);
+		try {
+			if (cur != null && cur.moveToFirst()) {
 
-		Set<?> set = highscores.entrySet();
-		Iterator<?> it = set.iterator();
-		TableRow row = new TableRow(this);
-		row.setGravity(Gravity.CENTER);
-		row.setLayoutParams(new TableRow.LayoutParams(
-				TableRow.LayoutParams.MATCH_PARENT,
-				TableRow.LayoutParams.WRAP_CONTENT));
-		while (it.hasNext()) {
-			Map.Entry<String, ?> scores = (Entry<String, ?>) it.next();
-			Log.d("GAURAV", " KEY = " + scores.getKey() + " , VALUE = "
-					+ scores.getValue());
+				do {
+					row = new TableRow(this);
+					row.setBackgroundColor(Color.parseColor("#ffffff"));
 
-			if (scores.getKey().equals("player")) {
-				name.setText("" + scores.getValue());
-				name.setLayoutParams(new TableRow.LayoutParams(
-						TableRow.LayoutParams.MATCH_PARENT,
-						TableRow.LayoutParams.WRAP_CONTENT));
-				row.addView(name);
-			} else if (scores.getKey().equals("guessbonus")) {
-				guessbonus.setText("" + scores.getValue());
-				guessbonus.setLayoutParams(new TableRow.LayoutParams(
-						TableRow.LayoutParams.MATCH_PARENT,
-						TableRow.LayoutParams.WRAP_CONTENT));
-				row.addView(guessbonus);
-			} else if (scores.getKey().equals("timeBonus")) {
-				timebonus.setText("" + scores.getValue());
-				movebonus.setLayoutParams(new TableRow.LayoutParams(
-						TableRow.LayoutParams.MATCH_PARENT,
-						TableRow.LayoutParams.WRAP_CONTENT));
-				row.addView(timebonus);
-			} else if (scores.getKey().equals("movesBonus")) {
-				movebonus.setText("" + scores.getValue());
-				movebonus.setLayoutParams(new TableRow.LayoutParams(
-						TableRow.LayoutParams.MATCH_PARENT,
-						TableRow.LayoutParams.WRAP_CONTENT));
-				row.addView(movebonus);
-			} else if (scores.getKey().equals("totalScore")) {
-				total.setText("" + scores.getValue());
-				total.setLayoutParams(new TableRow.LayoutParams(
-						TableRow.LayoutParams.MATCH_PARENT,
-						TableRow.LayoutParams.WRAP_CONTENT));
-				row.addView(total);
+					name = new TextView(this);
+					name.setBackgroundColor(Color.parseColor("#000000"));
+					name.setWidth(100);
+//					TableRow.LayoutParams params = (TableRow.LayoutParams) name
+//							.getLayoutParams();
+//					params.setMargins(1, 1, 1, 1);
+//					name.setLayoutParams(params);
+					name.setGravity(Gravity.CENTER_HORIZONTAL);
+
+					movebonus = new TextView(this);
+					movebonus.setBackgroundColor(Color.parseColor("#000000"));
+//					params = (TableRow.LayoutParams) movebonus
+//							.getLayoutParams();
+//					params.setMargins(1, 1, 1, 1);
+//					movebonus.setLayoutParams(params);
+					movebonus.setGravity(Gravity.CENTER_HORIZONTAL);
+
+					timebonus = new TextView(this);
+					timebonus.setBackgroundColor(Color.parseColor("#000000"));
+//					params = (TableRow.LayoutParams) timebonus
+//							.getLayoutParams();
+//					params.setMargins(1, 1, 1, 1);
+//					timebonus.setLayoutParams(params);
+					timebonus.setGravity(Gravity.CENTER_HORIZONTAL);
+
+					guessbonus = new TextView(this);
+					guessbonus.setBackgroundColor(Color.parseColor("#000000"));
+//					params = (TableRow.LayoutParams) guessbonus
+//							.getLayoutParams();
+//					params.setMargins(1, 1, 1, 1);
+//					guessbonus.setLayoutParams(params);
+					guessbonus.setGravity(Gravity.CENTER_HORIZONTAL);
+
+					total = new TextView(this);
+					total.setBackgroundColor(Color.parseColor("#000000"));
+//					params = (TableRow.LayoutParams) total
+//							.getLayoutParams();
+//					params.setMargins(1, 1, 1, 1);
+//					total.setLayoutParams(params);
+					total.setGravity(Gravity.CENTER_HORIZONTAL);
+
+					row.setGravity(Gravity.CENTER);
+					row.setLayoutParams(new TableRow.LayoutParams(
+							TableRow.LayoutParams.MATCH_PARENT,
+							TableRow.LayoutParams.WRAP_CONTENT));
+
+					name.setText(""
+							+ cur.getString(cur
+									.getColumnIndex(ContentDescriptor.Highscore.Column.PLAYERNAME)));
+					name.setLayoutParams(new TableRow.LayoutParams(
+							TableRow.LayoutParams.MATCH_PARENT,
+							TableRow.LayoutParams.WRAP_CONTENT));
+					row.addView(name);
+
+					movebonus
+							.setText(""
+									+ cur.getInt(cur
+											.getColumnIndex(ContentDescriptor.Highscore.Column.MOVEBONUS)));
+					movebonus.setLayoutParams(new TableRow.LayoutParams(
+							TableRow.LayoutParams.MATCH_PARENT,
+							TableRow.LayoutParams.WRAP_CONTENT));
+					row.addView(movebonus);
+
+					timebonus
+							.setText(""
+									+ cur.getInt(cur
+											.getColumnIndex(ContentDescriptor.Highscore.Column.TIMEBONUS)));
+					timebonus.setLayoutParams(new TableRow.LayoutParams(
+							TableRow.LayoutParams.MATCH_PARENT,
+							TableRow.LayoutParams.WRAP_CONTENT));
+					row.addView(timebonus);
+
+					guessbonus
+							.setText(""
+									+ cur.getInt(cur
+											.getColumnIndex(ContentDescriptor.Highscore.Column.GUESSBONUS)));
+					guessbonus.setLayoutParams(new TableRow.LayoutParams(
+							TableRow.LayoutParams.MATCH_PARENT,
+							TableRow.LayoutParams.WRAP_CONTENT));
+					row.addView(guessbonus);
+
+					total.setText(""
+							+ cur.getInt(cur
+									.getColumnIndex(ContentDescriptor.Highscore.Column.TOTALPOINTS)));
+					total.setLayoutParams(new TableRow.LayoutParams(
+							TableRow.LayoutParams.MATCH_PARENT,
+							TableRow.LayoutParams.WRAP_CONTENT));
+					row.addView(total);
+
+					highscoreTable.addView(row, new TableLayout.LayoutParams(
+							LayoutParams.MATCH_PARENT,
+							LayoutParams.WRAP_CONTENT));
+				} while (cur.moveToNext());
 			}
-
+		} finally {
+			if (cur != null) {
+				cur.close();
+			}
 		}
-
-		highscoreTable.addView(row, new TableLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 	}
 }

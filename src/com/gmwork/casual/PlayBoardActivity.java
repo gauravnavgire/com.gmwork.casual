@@ -275,14 +275,14 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 	}
 
 	private long updateScore(String playerName) {
-		
+
 		if (mCountdownTimer != null) {
 			mCountdownTimer.cancel();
 		}
 
 		if (mCurrentCountdownTime != -1) {
-			mTimeBonus = mCurrentCountdownTime * 5;
-			mMovesBonus = mTries * 10;
+			mTimeBonus += mCurrentCountdownTime * 5;
+			mMovesBonus += mTries * 10;
 
 			mTotalPoints = mNewgame ? mHighscorePref.getLong("totalScore", 0)
 					+ mTimeBonus + mMovesBonus : mTimeBonus + mMovesBonus
@@ -295,8 +295,8 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 		values.put(ContentDescriptor.Highscore.Column.GUESSBONUS, mGuessBonus);
 		values.put(ContentDescriptor.Highscore.Column.TOTALPOINTS, mTotalPoints);
 		if (playerName != null) {
-			String where = ContentDescriptor.Highscore.Column.PLAYERNAME + "=="
-					+ playerName;
+			String where = ContentDescriptor.Highscore.Column.PLAYERNAME + "='"
+					+ playerName+"'";
 			getContentResolver().update(
 					ContentDescriptor.Highscore.CONTENT_URI, values, where,
 					null);
@@ -415,6 +415,8 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 							Toast.LENGTH_LONG).show();
 					mNewgame = true;
 					ContentValues values = new ContentValues();
+					values.put(ContentDescriptor.Highscore.Column.PLAYERNAME,
+							playername.getText().toString());
 					values.put(ContentDescriptor.Highscore.Column.MOVEBONUS, 0);
 					values.put(ContentDescriptor.Highscore.Column.TIMEBONUS, 0);
 					values.put(ContentDescriptor.Highscore.Column.GUESSBONUS, 0);

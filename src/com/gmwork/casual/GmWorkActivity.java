@@ -33,6 +33,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.Facebook;
@@ -200,16 +201,16 @@ public class GmWorkActivity extends Activity {
 						mediaPlayer.stop();
 						isMusicPlaying = false;
 					}
-					mSpeakerImageBtn.setBackground(getResources().getDrawable(
-							R.drawable.speaker_off));
+					mSpeakerImageBtn.setImageDrawable(getResources()
+							.getDrawable(R.drawable.speaker_off));
 				} else {
 					Log.d(LOG_TAG, "Starting the background music in OnClick");
 					try {
 						mediaPlayer.prepare();
 						mediaPlayer.start();
 						isMusicPlaying = true;
-						mSpeakerImageBtn.setBackground(getResources()
-								.getDrawable(R.drawable.speaker));
+						mSpeakerImageBtn.setImageDrawable(getResources()
+								.getDrawable(R.drawable.speaker_off));
 					} catch (IllegalStateException e) {
 
 						Log.d(LOG_TAG,
@@ -334,6 +335,8 @@ public class GmWorkActivity extends Activity {
 		protected void onPostExecute(Void result) {
 			loadContent();
 			mProgressDialog.dismiss();
+			Toast.makeText(mContext, "Movies loaded. Have fun!",
+					Toast.LENGTH_SHORT);
 			super.onPostExecute(result);
 		}
 
