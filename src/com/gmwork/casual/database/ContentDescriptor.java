@@ -10,14 +10,14 @@ import android.provider.BaseColumns;
  * ContentProvider class. The Descriptor class manages the following meta data:
  * 
  * 
- * URI Authority – the authority portion of the URI representing this entity. In
- * our example it is “com.favrestaurant.contentprovider”
+ * URI Authority â€“ the authority portion of the URI representing this entity. In
+ * our example it is â€œcom.favrestaurant.contentproviderâ€�
  * 
- * URI Matcher – this is an internal registry used to map a URI path (serviced
+ * URI Matcher â€“ this is an internal registry used to map a URI path (serviced
  * by the ContentProvider) to an integer value.
  * 
  * For example, this class is called Restaurant. It exposes meta data such as
- * the entity name, supported URIs, etc. Class EntityClass.Cols – the entity
+ * the entity name, supported URIs, etc. Class EntityClass.Cols â€“ the entity
  * class provides an inner class called Cols. As you may have guessed, this
  * class exposes the name of the columns to exposed by the ContentProvider for
  * the entity.
@@ -53,7 +53,8 @@ public class ContentDescriptor {
 
 		matcher.addURI(authority, Movie.PATH, Movie.PATH_TOKEN);
 		matcher.addURI(authority, Movie.PATH_FOR_ID, Movie.PATH_FOR_ID_TOKEN);
-
+		matcher.addURI(authority, Highscore.PATH, Highscore.PATH_TOKEN);
+		matcher.addURI(authority, Highscore.PATH_FOR_ID, Highscore.PATH_FOR_ID_TOKEN);
 		return matcher;
 	}
 
@@ -73,6 +74,30 @@ public class ContentDescriptor {
 		public static final int PATH_TOKEN = 100;
 		public static final String PATH_FOR_ID = "movies/*";
 		public static final int PATH_FOR_ID_TOKEN = 200;
+		public static final Uri CONTENT_URI = ContentDescriptor.BASE_URI
+				.buildUpon().appendPath(PATH).build();
+		public static final String CONTENT_TYPE_DIR = "vnd.android.cursor.dir/vnd.content.app";
+		public static final String CONTENT_TYPE_ITEM = "vnd.android.cursor.item/vnd.content.app";
+	}
+	
+	public static class Highscore {
+		// For Database Helper class
+		public static final String TABLE_NAME = "highscore";
+
+		public static class Column {
+			public static final String ID = BaseColumns._ID;
+			public static final String PLAYERNAME = "playername";
+			public static final String MOVEBONUS = "movesbonus";
+			public static final String TIMEBONUS = "timebonus";
+			public static final String GUESSBONUS = "guessbonus";
+			public static final String TOTALPOINTS = "totalpoints";
+		}
+
+		// For Content Provider class
+		public static final String PATH = "highscore";
+		public static final int PATH_TOKEN = 101;
+		public static final String PATH_FOR_ID = "highscore/*";
+		public static final int PATH_FOR_ID_TOKEN = 201;
 		public static final Uri CONTENT_URI = ContentDescriptor.BASE_URI
 				.buildUpon().appendPath(PATH).build();
 		public static final String CONTENT_TYPE_DIR = "vnd.android.cursor.dir/vnd.content.app";

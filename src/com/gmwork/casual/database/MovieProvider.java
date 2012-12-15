@@ -61,6 +61,12 @@ public class MovieProvider extends ContentProvider {
 			return ContentDescriptor.Movie.CONTENT_URI.buildUpon()
 					.appendPath(String.valueOf(id)).build();
 		}
+		case ContentDescriptor.Highscore.PATH_TOKEN: {
+			long id = db.insert(ContentDescriptor.Highscore.TABLE_NAME, null,
+					values);
+			return ContentDescriptor.Movie.CONTENT_URI.buildUpon()
+					.appendPath(String.valueOf(id)).build();
+		}
 		default:
 			throw new UnsupportedOperationException("URI: " + uri
 					+ " not supported.");
@@ -86,6 +92,11 @@ public class MovieProvider extends ContentProvider {
 			builder.setTables(ContentDescriptor.Movie.TABLE_NAME);
 			return builder.query(db, null, null, null, null, null, null);
 		}
+		case ContentDescriptor.Highscore.PATH_TOKEN: {
+			SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+			builder.setTables(ContentDescriptor.Highscore.TABLE_NAME);
+			return builder.query(db, null, selection, null, null, null, null);
+		}
 		default:
 			return null;
 		}
@@ -95,8 +106,22 @@ public class MovieProvider extends ContentProvider {
 	@Override
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
-		// TODO Auto-generated method stub
-		return 0;
+
+		SQLiteDatabase db = mMovieDb.getWritableDatabase();
+		int token = ContentDescriptor.URI_MATCHER.match(uri);
+
+		switch (token) {
+		case ContentDescriptor.Highscore.PATH_TOKEN: {
+			int id = db.update(ContentDescriptor.Highscore.TABLE_NAME, values,
+					selection, selectionArgs);
+
+			return id;
+		}
+		default:
+			throw new UnsupportedOperationException("URI: " + uri
+					+ " not supported.");
+		}
+
 	}
 
 }

@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,6 +36,7 @@ import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gmwork.casual.database.ContentDescriptor;
 
@@ -66,8 +68,14 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 	private long mCurrentCountdownTime = -1;
 	private static final String HIGHSCORE = "highscore";
 	private static final String PLAYERNAME = "playername";
-	private SharedPreferences mHighscorePref,mPlayerNamePref;
-	private SharedPreferences.Editor mHighscoreEditor,mPlayerNameEditor;
+	private SharedPreferences mHighscorePref, mPlayerNamePref;
+	private SharedPreferences.Editor mHighscoreEditor, mPlayerNameEditor;
+	private boolean mNewgame;
+	private Animation mLogoAnimation;
+	private int mGuessBonus = 0;
+	private long mTotalPoints = 0;
+	private long mTimeBonus = 0;
+	private long mMovesBonus = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,9 +99,9 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 				R.anim.background_alpha);
 		mLinearLayout.startAnimation(backgroundAnimation);
 		mBollyLogo = (ImageView) findViewById(R.id.bollylogo);
-		Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(this,
+		mLogoAnimation = AnimationUtils.loadAnimation(this,
 				R.anim.bollylogo_anim);
-		mBollyLogo.startAnimation(hyperspaceJumpAnimation);
+		mBollyLogo.startAnimation(mLogoAnimation);
 		mTableLayout = (TableLayout) findViewById(R.id.alphabet_table);
 		mHiddenMovie = (TextView) findViewById(R.id.hiddenmovie);
 		mStart = (Button) findViewById(R.id.start);
@@ -105,9 +113,11 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 
 		mHighscorePref = getSharedPreferences(HIGHSCORE, MODE_PRIVATE);
 		mHighscoreEditor = mHighscorePref.edit();
-		
+
 		mPlayerNamePref = getSharedPreferences(PLAYERNAME, MODE_PRIVATE);
 		mPlayerNameEditor = mPlayerNamePref.edit();
+
+		showDialog(DIALOG_PLAYER_NAME);
 	}
 
 	private void setupMusic() {
@@ -249,28 +259,10 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 	}
 
 	private void won() {
-		long totalScore = 0;
-		long timeBonus = 0;
-		long movesBonus = 0;
 
-		if (mCountdownTimer != null) {
-			mCountdownTimer.cancel();
-		}
-
-		if (mCurrentCountdownTime != -1) {
-			timeBonus = mCurrentCountdownTime * 10;
-			movesBonus = mTries * 10;
-			totalScore = mHighscorePref.getLong("totalScore", 0) + timeBonus
-					+ movesBonus;
-		}
-		mHighscoreEditor.putString("player", "Gaurav");
-		mHighscoreEditor.putLong("guessbonus", 0);
-		mHighscoreEditor.putLong("timeBonus", timeBonus);
-		mHighscoreEditor.putLong("movesBonus", movesBonus);
-		mHighscoreEditor.putLong("totalScore", totalScore);
-		mHighscoreEditor.commit();
 		String wonmsg = getResources().getString(R.string.won_message) + " "
-				+ mMovie + " \n Total Points = " + totalScore;
+				+ mMovie + " \n Total Points = "
+				+ updateScore(mPlayerNamePref.getString(PLAYERNAME, null));
 		Builder dialog = new AlertDialog.Builder(PlayBoardActivity.this)
 				.setIcon(android.R.drawable.ic_dialog_info)
 				.setTitle(R.string.congrats_title)
@@ -280,6 +272,36 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 				.setNegativeButton(R.string.main_page, mDataButtonListener);
 		dialog.show();
 
+	}
+
+	private long updateScore(String playerName) {
+		
+		if (mCountdownTimer != null) {
+			mCountdownTimer.cancel();
+		}
+
+		if (mCurrentCountdownTime != -1) {
+			mTimeBonus = mCurrentCountdownTime * 5;
+			mMovesBonus = mTries * 10;
+
+			mTotalPoints = mNewgame ? mHighscorePref.getLong("totalScore", 0)
+					+ mTimeBonus + mMovesBonus : mTimeBonus + mMovesBonus
+					+ mGuessBonus;
+		}
+
+		ContentValues values = new ContentValues();
+		values.put(ContentDescriptor.Highscore.Column.MOVEBONUS, mMovesBonus);
+		values.put(ContentDescriptor.Highscore.Column.TIMEBONUS, mTimeBonus);
+		values.put(ContentDescriptor.Highscore.Column.GUESSBONUS, mGuessBonus);
+		values.put(ContentDescriptor.Highscore.Column.TOTALPOINTS, mTotalPoints);
+		if (playerName != null) {
+			String where = ContentDescriptor.Highscore.Column.PLAYERNAME + "=="
+					+ playerName;
+			getContentResolver().update(
+					ContentDescriptor.Highscore.CONTENT_URI, values, where,
+					null);
+		}
+		return mTotalPoints;
 	}
 
 	private String getMovie() {
@@ -349,18 +371,8 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 								.equalsIgnoreCase(mMovie)) {
 
 							mHiddenMovie.setText(mMovie);
-							Builder dialog = new AlertDialog.Builder(
-									PlayBoardActivity.this)
-									.setIcon(android.R.drawable.ic_dialog_info)
-									.setTitle(R.string.congrats_title)
-									.setMessage(R.string.won_message)
-									.setPositiveButton(
-											R.string.continue_button,
-											mDataButtonListener)
-									.setNegativeButton(R.string.main_page,
-											mDataButtonListener);
-							dismissDialog(DIALOG_GUESS_ID);
-							dialog.show();
+							mGuessBonus = 1000;
+							won();
 
 						} else {
 							lost();
@@ -374,9 +386,12 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 			// do the work to define the guess Dialog
 			dialog = new Dialog(PlayBoardActivity.this);
 			dialog.setContentView(R.layout.guessdialog);
-			dialog.setTitle(R.string.guess_title);
+			dialog.setTitle(R.string.playername_title);
+			dialog.setCancelable(false);
 			final EditText playername = (EditText) dialog
 					.findViewById(R.id.guess_word);
+			TextView message = (TextView) dialog.findViewById(R.id.message);
+			message.setText(R.string.playername_msg);
 			Button name = (Button) dialog.findViewById(R.id.guess);
 			Button cancel = (Button) dialog.findViewById(R.id.cancel);
 			cancel.setOnClickListener(new OnClickListener() {
@@ -391,7 +406,22 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 
 				@Override
 				public void onClick(View v) {
-					
+					mPlayerNameEditor.putString(PLAYERNAME, playername
+							.getText().toString());
+					mPlayerNameEditor.commit();
+					dismissDialog(DIALOG_PLAYER_NAME);
+					Toast.makeText(getApplicationContext(),
+							"Welcome " + playername.getText().toString(),
+							Toast.LENGTH_LONG).show();
+					mNewgame = true;
+					ContentValues values = new ContentValues();
+					values.put(ContentDescriptor.Highscore.Column.MOVEBONUS, 0);
+					values.put(ContentDescriptor.Highscore.Column.TIMEBONUS, 0);
+					values.put(ContentDescriptor.Highscore.Column.GUESSBONUS, 0);
+					values.put(ContentDescriptor.Highscore.Column.TOTALPOINTS,
+							0);
+					getContentResolver().insert(
+							ContentDescriptor.Highscore.CONTENT_URI, values);
 				}
 			});
 
@@ -411,6 +441,7 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 			case DialogInterface.BUTTON_POSITIVE:
 				dialog.dismiss();
 				reset();
+				gameProgress();
 				break;
 			case DialogInterface.BUTTON_NEGATIVE:
 				dialog.dismiss();
@@ -454,6 +485,7 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 			mAplhaScrollView.setClickable(true);
 			mStart.setVisibility(View.GONE);
 			mHiddenMovie.setVisibility(View.VISIBLE);
+			mHiddenMovie.startAnimation(mLogoAnimation);
 			if (mCountdownTimer == null) {
 				mCountdownTimer = new CountDownTimer(mMaxCountdownTime,
 						mCountdownDecrement) {

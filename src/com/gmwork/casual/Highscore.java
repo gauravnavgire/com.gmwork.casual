@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TableLayout;
@@ -40,44 +41,57 @@ public class Highscore extends Activity {
 		TextView guessbonus = new TextView(this);
 		TextView total = new TextView(this);
 		TableLayout highscoreTable = (TableLayout) findViewById(R.id.highscore_table);
+		highscoreTable.setSoundEffectsEnabled(true);
 
 		Map<String, ?> highscores = mHighscorePref.getAll();
 
 		Set<?> set = highscores.entrySet();
 		Iterator<?> it = set.iterator();
 		TableRow row = new TableRow(this);
-		row.setLayoutParams(new TableRow.LayoutParams());
-
-/*		while (it.hasNext()) {
+		row.setGravity(Gravity.CENTER);
+		row.setLayoutParams(new TableRow.LayoutParams(
+				TableRow.LayoutParams.MATCH_PARENT,
+				TableRow.LayoutParams.WRAP_CONTENT));
+		while (it.hasNext()) {
 			Map.Entry<String, ?> scores = (Entry<String, ?>) it.next();
 			Log.d("GAURAV", " KEY = " + scores.getKey() + " , VALUE = "
 					+ scores.getValue());
 
 			if (scores.getKey().equals("player")) {
 				name.setText("" + scores.getValue());
-				// row.addView(name, 0);
+				name.setLayoutParams(new TableRow.LayoutParams(
+						TableRow.LayoutParams.MATCH_PARENT,
+						TableRow.LayoutParams.WRAP_CONTENT));
 				row.addView(name);
 			} else if (scores.getKey().equals("guessbonus")) {
 				guessbonus.setText("" + scores.getValue());
-				// row.addView(guessbonus, 3);
+				guessbonus.setLayoutParams(new TableRow.LayoutParams(
+						TableRow.LayoutParams.MATCH_PARENT,
+						TableRow.LayoutParams.WRAP_CONTENT));
 				row.addView(guessbonus);
 			} else if (scores.getKey().equals("timeBonus")) {
 				timebonus.setText("" + scores.getValue());
-				// row.addView(timebonus, 2);
+				movebonus.setLayoutParams(new TableRow.LayoutParams(
+						TableRow.LayoutParams.MATCH_PARENT,
+						TableRow.LayoutParams.WRAP_CONTENT));
 				row.addView(timebonus);
 			} else if (scores.getKey().equals("movesBonus")) {
 				movebonus.setText("" + scores.getValue());
-				// row.addView(movebonus, 1);
+				movebonus.setLayoutParams(new TableRow.LayoutParams(
+						TableRow.LayoutParams.MATCH_PARENT,
+						TableRow.LayoutParams.WRAP_CONTENT));
 				row.addView(movebonus);
 			} else if (scores.getKey().equals("totalScore")) {
 				total.setText("" + scores.getValue());
-				// row.addView(total, 4);
+				total.setLayoutParams(new TableRow.LayoutParams(
+						TableRow.LayoutParams.MATCH_PARENT,
+						TableRow.LayoutParams.WRAP_CONTENT));
 				row.addView(total);
 			}
 
-		}*/
-		total.setText("3000");
-		row.addView(total);
-		highscoreTable.addView(row);
+		}
+
+		highscoreTable.addView(row, new TableLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 	}
 }

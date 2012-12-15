@@ -46,6 +46,10 @@
   <string name="guess_title">Do you want to guess?</string>
   <string name="guess_warning">Bonus won if guess is correct Or else \n Penalty is charged for wrong guess.</string>
   <string name="cancel">Cancel</string>
+
+  <string name="playername_title">Player</string>
+  <string name="playername_msg">Please enter you name.</string>
+  
   
   <!-- Highscore screen -->
   <string name="palyername">Player</string>
