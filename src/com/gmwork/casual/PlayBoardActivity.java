@@ -235,9 +235,6 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 							mTries--;
 							mTriesView.setText("Tries Left : " + mTries);
 							if (mTries == 0) {
-								if (mCountdownTimer != null) {
-									mCountdownTimer.cancel();
-								}
 								lost();
 							}
 
@@ -547,6 +544,10 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 	}
 
 	public void lost() {
+		if(mCountdownTimer != null){
+			mCountdownTimer.cancel();
+			mCountdownTimer = null;
+		}
 		String lostmsg = getResources().getString(R.string.lost_message) + " "
 				+ mMovie;
 		Builder dialog = new AlertDialog.Builder(PlayBoardActivity.this)

@@ -19,6 +19,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.ViewGroup.MarginLayoutParams;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableLayout.LayoutParams;
@@ -59,47 +61,34 @@ public class Highscore extends Activity {
 
 				do {
 					row = new TableRow(this);
-					row.setBackgroundColor(Color.parseColor("#ffffff"));
+					row.setBackgroundColor(Color.TRANSPARENT);
 
 					name = new TextView(this);
 					name.setBackgroundColor(Color.parseColor("#000000"));
 					name.setWidth(100);
-//					TableRow.LayoutParams params = (TableRow.LayoutParams) name
-//							.getLayoutParams();
-//					params.setMargins(1, 1, 1, 1);
-//					name.setLayoutParams(params);
+					LayoutParams params = new LayoutParams();
+					params.setMargins(1, 1, 1, 1);
+					name.setLayoutParams(params);
 					name.setGravity(Gravity.CENTER_HORIZONTAL);
 
 					movebonus = new TextView(this);
 					movebonus.setBackgroundColor(Color.parseColor("#000000"));
-//					params = (TableRow.LayoutParams) movebonus
-//							.getLayoutParams();
-//					params.setMargins(1, 1, 1, 1);
-//					movebonus.setLayoutParams(params);
+					movebonus.setLayoutParams(params);
 					movebonus.setGravity(Gravity.CENTER_HORIZONTAL);
 
 					timebonus = new TextView(this);
 					timebonus.setBackgroundColor(Color.parseColor("#000000"));
-//					params = (TableRow.LayoutParams) timebonus
-//							.getLayoutParams();
-//					params.setMargins(1, 1, 1, 1);
-//					timebonus.setLayoutParams(params);
+					timebonus.setLayoutParams(params);
 					timebonus.setGravity(Gravity.CENTER_HORIZONTAL);
 
 					guessbonus = new TextView(this);
 					guessbonus.setBackgroundColor(Color.parseColor("#000000"));
-//					params = (TableRow.LayoutParams) guessbonus
-//							.getLayoutParams();
-//					params.setMargins(1, 1, 1, 1);
-//					guessbonus.setLayoutParams(params);
+					guessbonus.setLayoutParams(params);
 					guessbonus.setGravity(Gravity.CENTER_HORIZONTAL);
 
 					total = new TextView(this);
 					total.setBackgroundColor(Color.parseColor("#000000"));
-//					params = (TableRow.LayoutParams) total
-//							.getLayoutParams();
-//					params.setMargins(1, 1, 1, 1);
-//					total.setLayoutParams(params);
+					total.setLayoutParams(params);
 					total.setGravity(Gravity.CENTER_HORIZONTAL);
 
 					row.setGravity(Gravity.CENTER);
