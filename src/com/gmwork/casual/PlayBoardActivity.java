@@ -390,6 +390,7 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 			TextView message = (TextView) dialog.findViewById(R.id.message);
 			message.setText(R.string.playername_msg);
 			Button name = (Button) dialog.findViewById(R.id.guess);
+			name.setText(R.string.ok);
 			Button cancel = (Button) dialog.findViewById(R.id.cancel);
 			cancel.setOnClickListener(new OnClickListener() {
 
@@ -516,8 +517,8 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 				Log.d(LOG_TAG, "Stopping the background music in OnClick");
 				mediaPlayer.stop();
 				isMusicPlaying = false;
-				mSpeakerImageBtn.setBackground(getResources().getDrawable(
-						R.drawable.speaker_off));
+				mSpeakerImageBtn.setImageDrawable(getResources()
+						.getDrawable(R.drawable.speaker_off));
 			} else {
 				Log.d(LOG_TAG, "Starting the background music in OnClick");
 				try {
@@ -533,7 +534,7 @@ public class PlayBoardActivity extends Activity implements OnClickListener {
 					Log.d(LOG_TAG,
 							"Couldn't load music from asset, " + e.getMessage());
 				}
-				mSpeakerImageBtn.setBackground(getResources().getDrawable(
+				mSpeakerImageBtn.setImageDrawable(getResources().getDrawable(
 						R.drawable.speaker));
 			}
 

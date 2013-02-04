@@ -53,14 +53,14 @@
 
     <TextView
         android:id="@+id/hiddenmovie"
+        style="@style/playboard_hiddenwordText"
         android:layout_width="fill_parent"
         android:layout_height="100dip"
         android:layout_gravity="center"
         android:background="@drawable/transp_bg"
         android:gravity="center"
         android:maxLines="5"
-        android:visibility="gone"
-        style="@style/playboard_hiddenwordText" />
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/start"
